@@ -83,8 +83,8 @@
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v11',
-            zoom: 11,
-            center: [-84.546776, 38.935556],
+            zoom: 10,
+            center: [-84.546776, 38.936],
             projection: 'globe'
         });
 
@@ -105,12 +105,16 @@
                 data: 'Parcels_25_08_06_noAgSoils_v2.geojson'
             });
 
+            map.addSource('parcelssimple', {
+                type: 'geojson',
+                data: 'parcelsbasic1.geojson'
+            });
+
             map.addLayer({
                 id: 'Lot-Sizes-of-Residential-Parcels',
                 type: 'fill',
                 source: 'parcels',
                 paint: {
-                    'fill-outline-color': 'white',
                     'fill-color': [
                         "case", ["==", ["get", "score2"], null], 'white',
                         ["interpolate", ["linear"], ["get", "score2"],
@@ -127,10 +131,21 @@
                     'fill-opacity': [
                         "case",
                         ["boolean", ["feature-state", "hover"], false],
-                        0.5,
+                        0.7,
                         1
                     ],
                 }
+            });
+
+            map.addLayer({
+                id: 'parcel-outlines',
+                type: 'line',
+                source: 'parcelssimple',
+                paint: {
+                    'line-color': 'black',
+                    'line-width': 0.25
+                },
+                minzoom: 13
             });
 
             window.addEventListener('resize', () => {
