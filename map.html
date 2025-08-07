@@ -110,6 +110,11 @@
                 data: 'parcelsbasic1.geojson'
             });
 
+            map.addSource('boundary', {
+                type: 'geojson',
+                data: 'boundary.geojson'
+            });
+
             map.addLayer({
                 id: 'Lot-Sizes-of-Residential-Parcels',
                 type: 'fill',
@@ -146,6 +151,16 @@
                     'line-width': 0.25
                 },
                 minzoom: 13
+            });
+
+            map.addLayer({
+                id: 'boundary',
+                type: 'line',
+                source: 'boundary',
+                paint: {
+                    'line-color': 'black',
+                    'line-width': 1
+                }
             });
 
             window.addEventListener('resize', () => {
