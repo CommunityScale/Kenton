@@ -1,247 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <title>Kenton County Suitability Analysis</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta charset="utf-8" />
+    <title>Kenton County Suitability Analysis</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Mapbox GL JS -->
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
-  <!-- Material Icons -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Inter', sans-serif;
-    }
+    <!-- Mapbox GL JS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
-    #map {
-      width: 100%;
-      height: 100%;
-    }
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    .mapboxgl-popup {
-      max-width: 200px;
-      font-size: 0.875rem;
-    }
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+font-family: 'Roboto', sans-serif;
+        }
 
-    .mapboxgl-popup-content {
-      background: white;
-      border-radius: 0.3rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 1rem;
-      color: #1f2937;
-    }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
 
-    .mapboxgl-popup-close-button {
-      font-size: 1.2rem;
-      top: 0.5rem;
-      right: 0.5rem;
-    }
-  </style>
+        .mapboxgl-popup {
+            max-width: 200px;
+            font-size: 0.875rem;
+        }
+
+        .mapboxgl-popup-content {
+            background: white;
+            border-radius: 0.3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            color: #1f2937;
+        }
+
+        .mapboxgl-popup-close-button {
+            font-size: 1.2rem;
+            top: 0.5rem;
+            right: 0.5rem;
+        }
+    </style>
 </head>
+
 <body class="overflow-hidden">
 
-<!-- FLEX CONTAINER -->
-<div class="flex h-screen w-screen">
-  
-  <!-- SIDEBAR -->
-  <div class="w-80 bg-white border-r border-gray-300 p-4 overflow-y-auto z-10">
-    <h2 class="text-xl font-semibold mb-4">Kenton County Suitability Analysis</h2>
-    
-    <!-- LEGEND -->
- <!-- GRADIENT LEGEND -->
-<div id="legend" class="mt-4 text-sm text-gray-700">
-  <h3 class="font-medium mb-2">Suitability score</h3>
-  <div class="h-4 w-full rounded" style="background: linear-gradient(to right, #fff7fb, #ece2f0, #d0d1e6, #a6bddb, #67a9cf, #3690c0, #02818a, #016450);"></div>
-  <div class="flex justify-between text-xs mt-1 text-gray-600">
-    <span>Less</span>
-    <span>More</span>
-  </div>
-</div>
+    <!-- FLEX CONTAINER -->
+    <div class="flex h-screen w-screen">
 
-<!-- Overlays Section -->
-<div id="overlay-wrapper" class="border-t border-gray-300 mt-6 pt-4">
-  <!-- Toggle Header -->
-  <button
-    id="overlay-toggle"
-    class="w-full flex items-center justify-between text-sm font-medium px-2 py-2 bg-gray-100 hover:bg-gray-200"
-  >
-    <span class="flex items-center gap-1">
-      <span class="material-icons align-text-bottom">layers</span>
-      Overlays
-    </span>
-    <svg id="overlay-arrow" class="w-4 h-4 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
-      viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </button>
+        <!-- SIDEBAR -->
+        <div class="w-80 bg-white border-r border-gray-300 p-4 overflow-y-auto z-10">
+            <h2 class="text-xl font-semibold mb-4">Kenton County Suitability Analysis</h2>
 
-  <!-- Toggle Content -->
-  <div id="overlay-content" class="hidden px-2 py-2 space-y-2 bg-white">
-    <!-- You will populate this with actual checkboxes later -->
-    <label class="flex items-start text-sm text-gray-700">
-      <div class="relative">
-        <input type="checkbox" class="sr-only overlay-toggle peer" value="example-overlay" checked />
-        <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
-        <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
-      </div>
-      <span class="leading-snug ms-2">Example Overlay</span>
-    </label>
-    <!-- Add more overlay toggles as needed -->
-  </div>
-</div>
+            <!-- LEGEND -->
+            <!-- GRADIENT LEGEND -->
+            <div id="legend" class="mt-4 text-sm text-gray-700">
+                <h3 class="font-medium mb-2">Suitability score</h3>
+                <div class="h-4 w-full rounded"
+                    style="background: linear-gradient(to right, #fff7fb, #ece2f0, #d0d1e6, #a6bddb, #67a9cf, #3690c0, #02818a, #016450);">
+                </div>
+                <div class="flex justify-between text-xs mt-1 text-gray-600">
+                    <span>Less</span>
+                    <span>More</span>
+                </div>
+            </div>
 
-<!-- About This Map (Collapsible) -->
-<div id="about-map-wrapper" class="border-t border-gray-300 mt-6 pt-4">
-  <button
-    id="about-map-toggle"
-    class="w-full flex items-center justify-between text-sm font-medium px-2 py-2 bg-gray-100 hover:bg-gray-200"
-  >
-    <span class="flex items-center gap-1">
-      <span class="material-icons align-text-bottom">info</span>
-      About this map
-    </span>
-    <svg id="about-map-arrow" class="w-4 h-4 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
-      viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </button>
+            <!-- Overlays Section -->
+            <div id="overlay-wrapper" class="border-t border-gray-300 mt-6 pt-4">
+                <!-- Toggle Header -->
+                <button id="overlay-toggle"
+                    class="w-full flex items-center justify-between text-sm font-medium px-2 py-2 bg-gray-100 hover:bg-gray-200">
+                    <span class="flex items-center gap-1">
+                        <span class="material-icons align-text-bottom">layers</span>
+                        Overlays
+                    </span>
+                    <svg id="overlay-arrow" class="w-4 h-4 transform transition-transform"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
 
-  <!-- Collapsible Content -->
-  <div id="about-map-content" class="hidden px-2 py-2 text-xs text-gray-600 leading-snug bg-white">
-    This interactive map shows parcels in Kenton County, color-coded by suitability score.
-    Further description of suitability score... 
-  </div>
-</div>
+                <!-- Toggle Content -->
+                <div id="overlay-content" class="hidden px-2 py-2 space-y-2 bg-white">
+                    <!-- You will populate this with actual checkboxes later -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input type="checkbox" class="sr-only overlay-toggle peer" value="example-overlay"
+                                checked />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Example Overlay</span>
+                    </label>
+                    <!-- Add more overlay toggles as needed -->
+                </div>
+            </div>
+
+            <!-- About This Map (Collapsible) -->
+            <div id="about-map-wrapper" class="border-t border-gray-300 mt-6 pt-4">
+                <button id="about-map-toggle"
+                    class="w-full flex items-center justify-between text-sm font-medium px-2 py-2 bg-gray-100 hover:bg-gray-200">
+                    <span class="flex items-center gap-1">
+                        <span class="material-icons align-text-bottom">info</span>
+                        About this map
+                    </span>
+                    <svg id="about-map-arrow" class="w-4 h-4 transform transition-transform"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                <!-- Collapsible Content -->
+                <div id="about-map-content" class="hidden px-2 py-2 text-xs text-gray-600 leading-snug bg-white">
+                    This interactive map shows parcels in Kenton County, color-coded by suitability score.
+                    Further description of suitability score...
+                </div>
+            </div>
+
+            <!-- Basemap Style Toggle -->
+            <div class="mt-6 border-t border-gray-300 pt-4">
+                <h3 class="font-medium text-sm mb-2">Basemap Style</h3>
+                <div class="flex gap-2 text-sm">
+                    <button id="btn-light"
+                        class="px-2 py-1 rounded border border-gray-300 bg-gray-100 hover:bg-gray-200">Light</button>
+                    <button id="btn-satellite"
+                        class="px-2 py-1 rounded border border-gray-300 bg-gray-100 hover:bg-gray-200">Satellite</button>
+                </div>
+            </div>
 
 
+        </div>
 
 
-  </div>
+        <!-- MAP -->
+        <div id="map" class="flex-grow"></div>
+    </div>
 
- 
-  <!-- MAP -->
-  <div id="map" class="flex-grow"></div>
-</div>
+    <!-- MAP SCRIPT -->
+    <script>
+        const lotSizePalette = [
+            '#fff7fb', '#ece2f0', '#d0d1e6', '#a6bddb', '#67a9cf',
+            '#3690c0', '#02818a', '#016450'
+        ];
 
-<!-- MAP SCRIPT -->
-<script>
-  const lotSizePalette = [
-    '#fff7fb', '#ece2f0', '#d0d1e6', '#a6bddb', '#67a9cf',
-    '#3690c0', '#02818a', '#016450'
-  ];
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2FyYWJyZW50IiwiYSI6ImNtMHpsb2Q4NTAwemoybHExbnB6eHVvZ2kifQ.nH0hUSv3IGzX6MkYB_cSmA';
 
-  mapboxgl.accessToken = 'pk.eyJ1Ijoic2FyYWJyZW50IiwiYSI6ImNtMHpsb2Q4NTAwemoybHExbnB6eHVvZ2kifQ.nH0hUSv3IGzX6MkYB_cSmA';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/communityscale/cmcuwuwcv00xz01s1gn7xccqi',
+            zoom: 10,
+            center: [-84.546776, 38.936],
+            projection: 'globe'
+        });
+        const BASEMAP_STYLES = {
+            light: 'mapbox://styles/communityscale/cmcuwuwcv00xz01s1gn7xccqi',
+            satellite: 'mapbox://styles/communityscale/cmc96uych026401s6577egc2r'
+        };
 
-  const map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/light-v11',
-    zoom: 10,
-    center: [-84.546776, 38.936],
-    projection: 'globe'
-  });
+        function addMapLayers() {
+            map.addSource('parcels', {
+                type: 'geojson',
+                data: 'Parcels_25_08_06_noAgSoils_v2.geojson'
+            });
 
-  map.on('load', () => {
-    map.setFog({});
+            map.addSource('parcelssimple', {
+                type: 'geojson',
+                data: 'parcelsbasic1.geojson'
+            });
 
-    map.addSource('parcels', {
-      type: 'geojson',
-      data: 'Parcels_25_08_06_noAgSoils_v2.geojson'
-    });
+            map.addSource('boundary', {
+                type: 'geojson',
+                data: 'boundary.geojson'
+            });
 
-    map.addSource('parcelssimple', {
-      type: 'geojson',
-      data: 'parcelsbasic1.geojson'
-    });
+            map.addLayer({
+                id: 'Lot-Sizes-of-Residential-Parcels',
+                type: 'fill',
+                source: 'parcels',
+                paint: {
+                    'fill-color': [
+                        "case", ["==", ["get", "score2"], null], 'white',
+                        ["interpolate", ["linear"], ["get", "score2"],
+                            0, lotSizePalette[0],
+                            2, lotSizePalette[1],
+                            2.25, lotSizePalette[2],
+                            2.5, lotSizePalette[3],
+                            3, lotSizePalette[4],
+                            3.5, lotSizePalette[5],
+                            4.5, lotSizePalette[6],
+                            5.5, lotSizePalette[7]
+                        ]
+                    ],
+                    'fill-opacity': [
+                        "case",
+                        ["boolean", ["feature-state", "hover"], false],
+                        0.7,
+                        1
+                    ]
+                }
+            });
 
-    map.addSource('boundary', {
-      type: 'geojson',
-      data: 'boundary.geojson'
-    });
+            map.addLayer({
+                id: 'parcel-outlines',
+                type: 'line',
+                source: 'parcelssimple',
+                paint: {
+                    'line-color': 'black',
+                    'line-width': 0.25
+                },
+                minzoom: 13
+            });
 
-    map.addLayer({
-      id: 'Lot-Sizes-of-Residential-Parcels',
-      type: 'fill',
-      source: 'parcels',
-      paint: {
-        'fill-color': [
-          "case", ["==", ["get", "score2"], null], 'white',
-          ["interpolate", ["linear"], ["get", "score2"],
-            0, lotSizePalette[0],
-            2, lotSizePalette[1],
-            2.25, lotSizePalette[2],
-            2.5, lotSizePalette[3],
-            3, lotSizePalette[4],
-            3.5, lotSizePalette[5],
-            4.5, lotSizePalette[6],
-            5.5, lotSizePalette[7]
-          ]
-        ],
-        'fill-opacity': [
-          "case",
-          ["boolean", ["feature-state", "hover"], false],
-          0.7,
-          1
-        ]
-      }
-    });
+            map.addLayer({
+                id: 'boundary',
+                type: 'line',
+                source: 'boundary',
+                paint: {
+                    'line-color': 'black',
+                    'line-width': 1
+                }
+            });
+        };
 
-    map.addLayer({
-      id: 'parcel-outlines',
-      type: 'line',
-      source: 'parcelssimple',
-      paint: {
-        'line-color': 'black',
-        'line-width': 0.25
-      },
-      minzoom: 13
-    });
+        map.on('load', () => {
+            map.setFog({});
+            addMapLayers();
+            map.setLayoutProperty('Lot-Sizes-of-Residential-Parcels', 'visibility', 'visible');
+            window.addEventListener('resize', () => {
+                map.resize();
+            });
 
-    map.addLayer({
-      id: 'boundary',
-      type: 'line',
-      source: 'boundary',
-      paint: {
-        'line-color': 'black',
-        'line-width': 1
-      }
-    });
+            map.setLayoutProperty('Lot-Sizes-of-Residential-Parcels', 'visibility', 'visible');
+        });
 
-    window.addEventListener('resize', () => {
-      map.resize();
-    });
 
-    map.setLayoutProperty('Lot-Sizes-of-Residential-Parcels', 'visibility', 'visible');
-  });
+        // Overlays section toggle
+        const overlayToggle = document.getElementById('overlay-toggle');
+        const overlayContent = document.getElementById('overlay-content');
+        const overlayArrow = document.getElementById('overlay-arrow');
 
-// Overlays section toggle
-const overlayToggle = document.getElementById('overlay-toggle');
-const overlayContent = document.getElementById('overlay-content');
-const overlayArrow = document.getElementById('overlay-arrow');
+        overlayToggle.addEventListener('click', () => {
+            overlayContent.classList.toggle('hidden');
+            overlayArrow.classList.toggle('rotate-180');
+        });
+        // About this map toggle
+        const aboutToggle = document.getElementById('about-map-toggle');
+        const aboutContent = document.getElementById('about-map-content');
+        const aboutArrow = document.getElementById('about-map-arrow');
 
-overlayToggle.addEventListener('click', () => {
-  overlayContent.classList.toggle('hidden');
-  overlayArrow.classList.toggle('rotate-180');
-});
-// About this map toggle
-const aboutToggle = document.getElementById('about-map-toggle');
-const aboutContent = document.getElementById('about-map-content');
-const aboutArrow = document.getElementById('about-map-arrow');
+        aboutToggle.addEventListener('click', () => {
+            aboutContent.classList.toggle('hidden');
+            aboutArrow.classList.toggle('rotate-180');
+        });
 
-aboutToggle.addEventListener('click', () => {
-  aboutContent.classList.toggle('hidden');
-  aboutArrow.classList.toggle('rotate-180');
-});
-</script>
+        function reloadMapWithStyle(style) {
+            map.setStyle(style);
+            map.once('style.load', () => {
+                addMapLayers();
+            });
+        }
+
+        document.getElementById('btn-light').addEventListener('click', () => {
+            reloadMapWithStyle(BASEMAP_STYLES.light);
+        });
+
+        document.getElementById('btn-satellite').addEventListener('click', () => {
+            reloadMapWithStyle(BASEMAP_STYLES.satellite);
+        });
+    </script>
 
 </body>
+
 </html>
