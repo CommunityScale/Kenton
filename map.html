@@ -25,7 +25,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
-font-family: 'Roboto', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         #map {
@@ -142,6 +142,17 @@ font-family: 'Roboto', sans-serif;
                 </div>
             </div>
 
+            <!-- Opacity Slider -->
+            <div id="opacity-control" class="mt-6 border-t border-gray-300 pt-4">
+                <h3 class="font-medium text-sm mb-2">Suitability layer opacity</h3>
+                <input id="opacity-slider" type="range" min="0" max="1" step="0.01" value="1"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-600">
+                <div class="flex justify-between text-xs text-gray-600 mt-1">
+                    <span>0%</span>
+                    <span>100%</span>
+                </div>
+            </div>
+
 
         </div>
 
@@ -157,6 +168,8 @@ font-family: 'Roboto', sans-serif;
             '#3690c0', '#02818a', '#016450'
         ];
 
+        let currentOpacity = 1;
+
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2FyYWJyZW50IiwiYSI6ImNtMHpsb2Q4NTAwemoybHExbnB6eHVvZ2kifQ.nH0hUSv3IGzX6MkYB_cSmA';
 
         const map = new mapboxgl.Map({
@@ -171,6 +184,15 @@ font-family: 'Roboto', sans-serif;
             satellite: 'mapbox://styles/communityscale/cmc96uych026401s6577egc2r'
         };
 
+        map.on('style.load', () => {
+            const layers = map.getStyle().layers;
+            for (const layer of layers) {
+                if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+                    labelLayerId = layer.id;
+                    break;
+                }
+            }
+        })
         function addMapLayers() {
             map.addSource('parcels', {
                 type: 'geojson',
@@ -209,10 +231,10 @@ font-family: 'Roboto', sans-serif;
                         "case",
                         ["boolean", ["feature-state", "hover"], false],
                         0.7,
-                        1
+                        currentOpacity
                     ]
                 }
-            });
+            }, labelLayerId);
 
             map.addLayer({
                 id: 'parcel-outlines',
@@ -223,7 +245,7 @@ font-family: 'Roboto', sans-serif;
                     'line-width': 0.25
                 },
                 minzoom: 13
-            });
+            }, labelLayerId);
 
             map.addLayer({
                 id: 'boundary',
@@ -236,6 +258,18 @@ font-family: 'Roboto', sans-serif;
             });
         };
 
+        const opacitySlider = document.getElementById('opacity-slider');
+        opacitySlider.addEventListener('input', (e) => {
+            currentOpacity = parseFloat(e.target.value);
+            map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
+                "case",
+                ["boolean", ["feature-state", "hover"], false],
+                0.7,
+                currentOpacity
+            ]);
+        });
+
+        let labelLayerId; //pull text fields on top!!
         map.on('load', () => {
             map.setFog({});
             addMapLayers();
@@ -271,6 +305,13 @@ font-family: 'Roboto', sans-serif;
             map.setStyle(style);
             map.once('style.load', () => {
                 addMapLayers();
+
+                map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            0.7,
+            currentOpacity
+        ]);
             });
         }
 
