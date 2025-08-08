@@ -91,21 +91,20 @@
                     </svg>
                 </button>
 
+                
+
                 <!-- Toggle Content -->
                 <div id="overlay-content" class="hidden px-2 py-2 space-y-2 bg-white">
                     <!-- You will populate this with actual checkboxes later -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input type="checkbox" class="sr-only overlay-toggle peer" value="example-overlay"
-                                checked />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
-                            </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Example Overlay</span>
-                    </label>
+ <!-- Overlay Toggle: Unbuildable Areas -->
+<label class="flex items-start text-sm text-gray-700">
+  <div class="relative">
+    <input id="toggle-unbuild2" type="checkbox" class="sr-only peer" />
+    <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
+    <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
+  </div>
+  <span class="leading-snug ms-2">Unbuildable Areas</span>
+</label>
                     <!-- Add more overlay toggles as needed -->
                 </div>
             </div>
@@ -209,6 +208,11 @@
                 data: 'boundary.geojson'
             });
 
+            map.addSource('unbuild', {
+                type: 'geojson',
+                data: 'unbuild2.geojson'
+            });
+
             map.addLayer({
                 id: 'Lot-Sizes-of-Residential-Parcels',
                 type: 'fill',
@@ -233,6 +237,19 @@
                         0.7,
                         currentOpacity
                     ]
+                }
+            }, labelLayerId);
+
+            map.addLayer({
+                id: 'unbuild2',
+                type: 'fill',
+                source: 'unbuild',
+                  layout: {
+    visibility: 'none'
+  },
+                paint: {
+                    'fill-color': 'yellow',
+                    'fill-opacity': 0.25
                 }
             }, labelLayerId);
 
@@ -279,6 +296,11 @@
             });
 
             map.setLayoutProperty('Lot-Sizes-of-Residential-Parcels', 'visibility', 'visible');
+
+               // Restore unbuild2 visibility after re-adding layers
+    if (unbuild2Visible && map.getLayer('unbuild2')) {
+      map.setLayoutProperty('unbuild2', 'visibility', 'visible');
+    }
         });
 
 
@@ -296,24 +318,35 @@
         const aboutContent = document.getElementById('about-map-content');
         const aboutArrow = document.getElementById('about-map-arrow');
 
+        document.getElementById('toggle-unbuild2').addEventListener('change', (e) => {
+  const visible = e.target.checked ? 'visible' : 'none';
+  if (map.getLayer('unbuild2')) {
+    map.setLayoutProperty('unbuild2', 'visibility', visible);
+  }
+});
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
         });
 
-        function reloadMapWithStyle(style) {
-            map.setStyle(style);
-            map.once('style.load', () => {
-                addMapLayers();
+function reloadMapWithStyle(style) {
+  // Capture checkbox state before reloading the style
+  const unbuild2Visible = document.getElementById('toggle-unbuild2').checked;
 
-                map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
-            "case",
-            ["boolean", ["feature-state", "hover"], false],
-            0.7,
-            currentOpacity
-        ]);
-            });
-        }
+  map.setStyle(style);
+  map.once('style.load', () => {
+    addMapLayers();
+
+    map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
+      "case",
+      ["boolean", ["feature-state", "hover"], false],
+      0.7,
+      currentOpacity
+    ]);
+
+  });
+}
 
         document.getElementById('btn-light').addEventListener('click', () => {
             reloadMapWithStyle(BASEMAP_STYLES.light);
