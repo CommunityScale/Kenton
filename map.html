@@ -103,7 +103,7 @@
     <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
     <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
   </div>
-  <span class="leading-snug ms-2">Unbuildable Areas</span>
+  <span class="leading-snug ms-2">Flood hazard area, 1% and 0.2% annual chance</span>
 </label>
                     <!-- Add more overlay toggles as needed -->
                 </div>
@@ -210,7 +210,7 @@
 
             map.addSource('unbuild', {
                 type: 'geojson',
-                data: 'unbuild2.geojson'
+                data: 'floodactually.geojson'
             });
 
             map.addLayer({
@@ -297,10 +297,7 @@
 
             map.setLayoutProperty('Lot-Sizes-of-Residential-Parcels', 'visibility', 'visible');
 
-               // Restore unbuild2 visibility after re-adding layers
-    if (unbuild2Visible && map.getLayer('unbuild2')) {
-      map.setLayoutProperty('unbuild2', 'visibility', 'visible');
-    }
+
         });
 
 
@@ -331,10 +328,10 @@
         });
 
 function reloadMapWithStyle(style) {
-  // Capture checkbox state before reloading the style
   const unbuild2Visible = document.getElementById('toggle-unbuild2').checked;
 
   map.setStyle(style);
+
   map.once('style.load', () => {
     addMapLayers();
 
@@ -345,6 +342,12 @@ function reloadMapWithStyle(style) {
       currentOpacity
     ]);
 
+    // Wait until all layers are added, then restore visibility
+    map.once('idle', () => {
+      if (map.getLayer('unbuild2')) {
+        map.setLayoutProperty('unbuild2', 'visibility', unbuild2Visible ? 'visible' : 'none');
+      }
+    });
   });
 }
 
