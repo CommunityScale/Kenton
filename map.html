@@ -91,21 +91,48 @@
                     </svg>
                 </button>
 
-                
+
 
                 <!-- Toggle Content -->
                 <div id="overlay-content" class="hidden px-2 py-2 space-y-2 bg-white">
                     <!-- You will populate this with actual checkboxes later -->
- <!-- Overlay Toggle: Unbuildable Areas -->
-<label class="flex items-start text-sm text-gray-700">
-  <div class="relative">
-    <input id="toggle-unbuild2" type="checkbox" class="sr-only peer" />
-    <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
-    <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
-  </div>
-  <span class="leading-snug ms-2">Flood hazard area, 1% and 0.2% annual chance</span>
-</label>
-                    <!-- Add more overlay toggles as needed -->
+                    <!-- Overlay Toggle: Flood -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-flood" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Flood hazard area, 1% and 0.2% annual chance</span>
+                    </label>
+                    <!-- Overlay Toggle: IDK Unbuildable -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-idkunbuild" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Other unbuildable constraints</span>
+                    </label>
+
+                    <!-- Overlay Toggle: Land Use -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-unbuildlanduse" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Existing land use</span>
+                    </label>
                 </div>
             </div>
 
@@ -208,9 +235,20 @@
                 data: 'boundary.geojson'
             });
 
-            map.addSource('unbuild', {
+            map.addSource('flood', {
                 type: 'geojson',
                 data: 'floodactually.geojson'
+            });
+
+            map.addSource('idkunbuild', {
+                type: 'geojson',
+                data: 'flood.geojson'
+            });
+
+
+            map.addSource('unbuildlanduse', {
+                type: 'geojson',
+                data: 'landuse3.geojson'
             });
 
             map.addLayer({
@@ -241,14 +279,40 @@
             }, labelLayerId);
 
             map.addLayer({
-                id: 'unbuild2',
+                id: 'flood',
                 type: 'fill',
-                source: 'unbuild',
-                  layout: {
-    visibility: 'none'
-  },
+                source: 'flood',
+                layout: {
+                    visibility: 'none'
+                },
                 paint: {
-                    'fill-color': 'yellow',
+                    'fill-color': '#3643B8',
+                    'fill-opacity': 0.25
+                }
+            }, labelLayerId);
+
+            map.addLayer({
+                id: 'unbuildlanduse',
+                type: 'fill',
+                source: 'unbuildlanduse',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': '#ECD731',
+                    'fill-opacity': 0.25
+                }
+            }, labelLayerId);
+
+            map.addLayer({
+                id: 'idkunbuild',
+                type: 'fill',
+                source: 'idkunbuild',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': '#F95738',
                     'fill-opacity': 0.25
                 }
             }, labelLayerId);
@@ -315,11 +379,19 @@
         const aboutContent = document.getElementById('about-map-content');
         const aboutArrow = document.getElementById('about-map-arrow');
 
-        document.getElementById('toggle-unbuild2').addEventListener('change', (e) => {
+document.getElementById('toggle-flood').addEventListener('change', (e) => {
   const visible = e.target.checked ? 'visible' : 'none';
-  if (map.getLayer('unbuild2')) {
-    map.setLayoutProperty('unbuild2', 'visibility', visible);
-  }
+  if (map.getLayer('flood')) map.setLayoutProperty('flood', 'visibility', visible);
+});
+
+document.getElementById('toggle-idkunbuild').addEventListener('change', (e) => {
+  const visible = e.target.checked ? 'visible' : 'none';
+  if (map.getLayer('idkunbuild')) map.setLayoutProperty('idkunbuild', 'visibility', visible);
+});
+
+document.getElementById('toggle-unbuildlanduse').addEventListener('change', (e) => {
+  const visible = e.target.checked ? 'visible' : 'none';
+  if (map.getLayer('unbuildlanduse')) map.setLayoutProperty('unbuildlanduse', 'visibility', visible);
 });
 
         aboutToggle.addEventListener('click', () => {
@@ -328,7 +400,9 @@
         });
 
 function reloadMapWithStyle(style) {
-  const unbuild2Visible = document.getElementById('toggle-unbuild2').checked;
+  const floodVisible = document.getElementById('toggle-flood').checked;
+  const idkVisible = document.getElementById('toggle-idkunbuild').checked;
+  const unbuildlanduseVisible = document.getElementById('toggle-landuse').checked;
 
   map.setStyle(style);
 
@@ -336,20 +410,20 @@ function reloadMapWithStyle(style) {
     addMapLayers();
 
     map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
-      "case",
-      ["boolean", ["feature-state", "hover"], false],
-      0.7,
-      currentOpacity
+      "case", ["boolean", ["feature-state", "hover"], false], 0.7, currentOpacity
     ]);
 
-    // Wait until all layers are added, then restore visibility
     map.once('idle', () => {
-      if (map.getLayer('unbuild2')) {
-        map.setLayoutProperty('unbuild2', 'visibility', unbuild2Visible ? 'visible' : 'none');
-      }
+      if (map.getLayer('flood'))
+        map.setLayoutProperty('flood', 'visibility', floodVisible ? 'visible' : 'none');
+      if (map.getLayer('idkunbuild'))
+        map.setLayoutProperty('idkunbuild', 'visibility', idkVisible ? 'visible' : 'none');
+      if (map.getLayer('unbuildlanduse'))
+        map.setLayoutProperty('unbuildlanduse', 'visibility', unbuildlanduseVisible ? 'visible' : 'none');
     });
   });
 }
+
 
         document.getElementById('btn-light').addEventListener('click', () => {
             reloadMapWithStyle(BASEMAP_STYLES.light);
