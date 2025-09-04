@@ -36,7 +36,6 @@
         .mapboxgl-popup {
             max-width: 200px;
             font-size: 0.875rem;
-            font-family: 'Roboto', sans-serif;
         }
 
         .mapboxgl-popup-content {
@@ -239,7 +238,7 @@
         function addMapLayers() {
             map.addSource('parcels', {
                 type: 'geojson',
-                data: 'Parcels_25_08_06_noAgSoils_v2_with_addresses.geojson'
+                data: 'Parcels_with_addresses.geojson'
             });
 
             map.addSource('parcelssimple', {
@@ -378,6 +377,35 @@
 
             map.setLayoutProperty('Lot-Sizes-of-Residential-Parcels', 'visibility', 'visible');
 
+            map.on('click', 'Lot-Sizes-of-Residential-Parcels', (e) => {
+                const coordinates = e.lngLat;
+                const properties = e.features[0].properties;
+                
+                const address = properties.address || 'Address not available';
+                const score2 = properties.score2 !== null && properties.score2 !== undefined ? 
+                    properties.score2.toFixed(2) : 'Not available';
+                
+                const popupContent = `
+                    <div class="popup-header">Parcel Information</div>
+                    <div class="popup-content">
+                        <p><strong>Address:</strong> ${address}</p>
+                        <p><strong>Suitability Score:</strong> ${score2}</p>
+                    </div>
+                `;
+                
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(popupContent)
+                    .addTo(map);
+            });
+
+            map.on('mouseenter', 'Lot-Sizes-of-Residential-Parcels', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'Lot-Sizes-of-Residential-Parcels', () => {
+                map.getCanvas().style.cursor = '';
+            });
 
         });
 
@@ -448,44 +476,6 @@ const unbuildlanduseVisible = document.getElementById('toggle-unbuildlanduse').c
 
         document.getElementById('btn-satellite').addEventListener('click', () => {
             reloadMapWithStyle(BASEMAP_STYLES.satellite);
-        });
-
-        // Popup functionality
-        map.on('click', 'Lot-Sizes-of-Residential-Parcels', (e) => {
-            const features = e.features;
-            if (!features.length) return;
-
-            const feature = features[0];
-            const properties = feature.properties;
-            
-            // Create popup content with score2 data and address
-            const popupContent = `
-                <div class="popup-header">Parcel Information</div>
-                <div class="popup-content">
-                    ${properties.ADDRESS ? `<p><strong>Address:</strong> ${properties.ADDRESS}</p>` : ''}
-                    ${properties.score2 !== null && properties.score2 !== undefined ? 
-                        `<p><strong>Suitability Score:</strong> ${Number(properties.score2).toFixed(2)}</p>` : 
-                        '<p><strong>Suitability Score:</strong> Not available</p>'}
-                    ${properties.OBJECTID ? `<p><strong>Parcel ID:</strong> ${properties.OBJECTID}</p>` : ''}
-                    ${properties.AREA_ACRES ? `<p><strong>Area:</strong> ${Number(properties.AREA_ACRES).toFixed(2)} acres</p>` : ''}
-                    ${properties.LAND_USE ? `<p><strong>Land Use:</strong> ${properties.LAND_USE}</p>` : ''}
-                    ${properties.OWNER ? `<p><strong>Owner:</strong> ${properties.OWNER}</p>` : ''}
-                </div>
-            `;
-
-            new mapboxgl.Popup()
-                .setLngLat(e.lngLat)
-                .setHTML(popupContent)
-                .addTo(map);
-        });
-
-        // Change cursor to pointer when hovering over parcels
-        map.on('mouseenter', 'Lot-Sizes-of-Residential-Parcels', () => {
-            map.getCanvas().style.cursor = 'pointer';
-        });
-
-        map.on('mouseleave', 'Lot-Sizes-of-Residential-Parcels', () => {
-            map.getCanvas().style.cursor = '';
         });
     </script>
 
