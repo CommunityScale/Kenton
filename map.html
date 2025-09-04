@@ -149,6 +149,18 @@
                         </div>
                         <span class="leading-snug ms-2">Existing land use</span>
                     </label>
+                    <!-- Overlay Toggle: Sales -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-sales" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Recent property sales</span>
+                    </label>
                 </div>
             </div>
 
@@ -267,6 +279,11 @@
                 data: 'landuse3.geojson'
             });
 
+            map.addSource('sales', {
+                type: 'geojson',
+                data: 'rentcast.geojson'
+            });
+
             map.addLayer({
                 id: 'Lot-Sizes-of-Residential-Parcels',
                 type: 'fill',
@@ -342,6 +359,22 @@
                     'line-width': 0.25
                 },
                 minzoom: 13
+            }, labelLayerId);
+
+            map.addLayer({
+                id: 'sales',
+                type: 'circle',
+                source: 'sales',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'circle-color': '#FF6B6B',
+                    'circle-radius': 4,
+                    'circle-opacity': 0.8,
+                    'circle-stroke-color': '#FF4444',
+                    'circle-stroke-width': 1
+                }
             }, labelLayerId);
 
             map.addLayer({
@@ -439,6 +472,11 @@ document.getElementById('toggle-unbuildlanduse').addEventListener('change', (e) 
   if (map.getLayer('unbuildlanduse')) map.setLayoutProperty('unbuildlanduse', 'visibility', visible);
 });
 
+document.getElementById('toggle-sales').addEventListener('change', (e) => {
+  const visible = e.target.checked ? 'visible' : 'none';
+  if (map.getLayer('sales')) map.setLayoutProperty('sales', 'visibility', visible);
+});
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -448,6 +486,7 @@ function reloadMapWithStyle(style) {
   const floodVisible = document.getElementById('toggle-flood').checked;
   const idkVisible = document.getElementById('toggle-idkunbuild').checked;
 const unbuildlanduseVisible = document.getElementById('toggle-unbuildlanduse').checked;
+  const salesVisible = document.getElementById('toggle-sales').checked;
 
   map.setStyle(style);
 
@@ -465,6 +504,8 @@ const unbuildlanduseVisible = document.getElementById('toggle-unbuildlanduse').c
         map.setLayoutProperty('idkunbuild', 'visibility', idkVisible ? 'visible' : 'none');
       if (map.getLayer('unbuildlanduse'))
         map.setLayoutProperty('unbuildlanduse', 'visibility', unbuildlanduseVisible ? 'visible' : 'none');
+      if (map.getLayer('sales'))
+        map.setLayoutProperty('sales', 'visibility', salesVisible ? 'visible' : 'none');
     });
   });
 }
