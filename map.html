@@ -189,6 +189,32 @@
                         </div>
                         <span class="leading-snug ms-2">Mode share</span>
                     </label>
+
+                    <!-- Overlay Toggle: Sanitary Service -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-sanitaryservice" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Sanitary service area</span>
+                    </label>
+
+                    <!-- Overlay Toggle: Water Service -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-waterservice" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Water service area</span>
+                    </label>
                 </div>
             </div>
 
@@ -336,6 +362,16 @@
                 data: 'sales3.geojson'
             });
 
+            map.addSource('sanitaryservice', {
+                type: 'geojson',
+                data: 'sanitaryservice.geojson'
+            });
+
+            map.addSource('waterservice', {
+                type: 'geojson',
+                data: 'waterservice.geojson'
+            });
+
                         map.addSource('walk', {
                 type: 'geojson',
                 data: 'walkability.geojson'
@@ -382,6 +418,32 @@
                 id: 'flood',
                 type: 'fill',
                 source: 'flood',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': '#3643B8',
+                    'fill-opacity': 0.25
+                }
+            }, labelLayerId);
+
+            map.addLayer({
+                id: 'sanitaryservice',
+                type: 'fill',
+                source: 'sanitaryservice',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': '#3643B8',
+                    'fill-opacity': 0.25
+                }
+            }, labelLayerId);
+
+            map.addLayer({
+                id: 'waterservice',
+                type: 'fill',
+                source: 'waterservice',
                 layout: {
                     visibility: 'none'
                 },
@@ -660,6 +722,16 @@
             }
         });
 
+        document.getElementById('toggle-sanitaryservice').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('sanitaryservice')) map.setLayoutProperty('sanitaryservice', 'visibility', visible);
+        });
+
+        document.getElementById('toggle-waterservice').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('waterservice')) map.setLayoutProperty('waterservice', 'visibility', visible);
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -672,6 +744,8 @@
             const salesVisible = document.getElementById('toggle-sales').checked;
             const walkVisible = document.getElementById('toggle-walk').checked;
             const modeshareVisible = document.getElementById('toggle-modeshare').checked;
+            const sanitaryserviceVisible = document.getElementById('toggle-sanitaryservice').checked;
+            const waterserviceVisible = document.getElementById('toggle-waterservice').checked;
 
             map.setStyle(style);
 
@@ -685,6 +759,10 @@
                 map.once('idle', () => {
                     if (map.getLayer('flood'))
                         map.setLayoutProperty('flood', 'visibility', floodVisible ? 'visible' : 'none');
+                    if (map.getLayer('sanitaryservice'))
+                        map.setLayoutProperty('sanitaryservice', 'visibility', sanitaryserviceVisible ? 'visible' : 'none');
+                    if (map.getLayer('waterservice'))
+                        map.setLayoutProperty('waterservice', 'visibility', waterserviceVisible ? 'visible' : 'none');
                     if (map.getLayer('idkunbuild'))
                         map.setLayoutProperty('idkunbuild', 'visibility', idkVisible ? 'visible' : 'none');
                     if (map.getLayer('unbuildlanduse'))

@@ -1,0 +1,66 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.40.8-Bratislava">
+  <identifier>serv_area_2023</identifier>
+  <parentidentifier></parentidentifier>
+  <language></language>
+  <type>dataset</type>
+  <title>published.SDEDBO.Water_ServiceArea_CC_KC</title>
+  <abstract>This Data Product serves as the Water Utility Service Provider District Boundary data for Kenton County and Campbell County, KY. This Water Utility Service Provider District Boundary Data Product shows the service area of the Northern Kentucky Water District (NKWD), along with other water utility providers. This Water Utility Service Provider District Boundary Data Product is primarily intended for display, analysis, and mapping for current planning purposes, community development projects, and GIS-related analyses. The Water Utility Service Provider District Boundary Data Product is not intended for property taxation purposes. This Data Product is stored, edited and maintained as polygon geometry. This Water Utility Service Area District Boundary Data Product may change at any time, with or without notice.
+
+This Data Product serves as the Water Utility Service Provider District Boundary data for Kenton County and Campbell County, KY. This Water Utility Service Provider District Boundary Data Product shows the service area of the Northern Kentucky Water District (NKWD), along with other water utility providers. This Water Utility Service Provider District Boundary Data Product is primarily intended for display, analysis, and mapping for current planning purposes, community development projects, and GIS-related analyses. The Water Utility Service Provider District Boundary Data Product is not intended for property taxation purposes. This Data Product is stored, edited and maintained as polygon geometry. This Water Utility Service Area District Boundary Data Product may change at any time, with or without notice.</abstract>
+  <keywords vocabulary="Search keys">
+    <keyword>Service Areas</keyword>
+    <keyword>Water District</keyword>
+    <keyword>NKWD</keyword>
+    <keyword>utilitiesCommunication</keyword>
+    <keyword>Kenton County</keyword>
+    <keyword>Campbell County</keyword>
+    <keyword>Kentucky</keyword>
+  </keywords>
+  <keywords vocabulary="gmd:topicCategory">
+    <keyword>Service Areas</keyword>
+    <keyword>Water District</keyword>
+    <keyword>NKWD</keyword>
+    <keyword>utilitiesCommunication</keyword>
+  </keywords>
+  <contact>
+    <contactAddress>
+      <type>physical</type>
+      <address>1840 Simon Kenton Way</address>
+      <city>Covington</city>
+      <administrativearea>KY</administrativearea>
+      <postalcode>41011</postalcode>
+      <country>US</country>
+    </contactAddress>
+    <name>Director of LINK-GIS  </name>
+    <organization>LINK-GIS, managed by Planning and Development Services of Kenton County </organization>
+    <position>Director of LINK-GIS  </position>
+    <voice>859.331.8980</voice>
+    <fax></fax>
+    <email>GIS02@pdskc.org </email>
+    <role>Point of contact</role>
+  </contact>
+  <links/>
+  <dates/>
+  <fees></fees>
+  <constraints type="Limitations of use">All Users hereby acknowledge that PDS, LINK-GIS and any, or all, of its partners or employees accept no liability for use of this Data Product. These Data Products have not been prepared for, and are not suitable for engineering, or surveying purposes. Generally, these Data Products do not represent on-the-ground surveys, but rather represent the approximate relative location of boundaries and features. These Data Products are for general planning purposes only, no other intent is implied. Products should not be used for making financial or any other commitments. PDS, LINK-GIS and any, or all, of its partners or employees provide these Data Products with the understanding that they are not guaranteed to be accurate, correct or complete and conclusions drawn from the Data Products are the responsibility of the User. While every effort has been made to ensure the accuracy, correctness and timeliness of materials presented anywhere within the Data Products, PDS, LINK-GIS and any, or all, of its partners or employees assumes no responsibility for errors or omissions, even if advised of the possibility of such damage.</constraints>
+  <constraints type="Security constraints"></constraints>
+  <rights>LINK-GIS, Planning and Development Services of Kenton County (PDS), Northern Kentucky Water District (NKWD)</rights>
+  <encoding></encoding>
+  <crs>
+    <spatialrefsys nativeFormat="Wkt">
+      <wkt></wkt>
+      <proj4></proj4>
+      <srsid>0</srsid>
+      <srid>0</srid>
+      <authid></authid>
+      <description></description>
+      <projectionacronym></projectionacronym>
+      <ellipsoidacronym></ellipsoidacronym>
+      <geographicflag>false</geographicflag>
+    </spatialrefsys>
+  </crs>
+  <extent>
+    <spatial crs="EPSG:4326" miny="38.77623200000000026" minz="0" maxx="-84.23276500000000055" maxy="39.14849499999999694" minx="-84.89838299999999549" maxz="0" dimensions="2"/>
+  </extent>
+</qgis>
