@@ -92,6 +92,7 @@
                 </div>
             </div>
 
+
             <!-- Overlays Section -->
             <div id="overlay-wrapper" class="border-t border-gray-300 mt-6 pt-4">
                 <!-- Toggle Header -->
@@ -147,7 +148,7 @@
                                 class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
                             </div>
                         </div>
-                        <span class="leading-snug ms-2">Existing land use</span>
+                        <span class="leading-snug ms-2">Priority non-residential land use</span>
                     </label>
 
                     <!-- Overlay Toggle: Sales -->
@@ -161,6 +162,32 @@
                             </div>
                         </div>
                         <span class="leading-snug ms-2">Recent sales</span>
+                    </label>
+
+                    <!-- Overlay Toggle: Walk -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-walk" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Walkability</span>
+                    </label>
+
+                    <!-- Overlay Toggle: Modeshare -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-modeshare" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Mode share</span>
                     </label>
                 </div>
             </div>
@@ -208,6 +235,29 @@
                 </div>
             </div>
 
+            <!-- WALK LEGEND -->
+            <div id="walk-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700" style="display: none;">
+                <h3 class="font-medium mb-2">Walkability</h3>
+                <div class="h-4 w-full rounded"
+                    style="background: linear-gradient(to right, #dce18b, #82ac21, #3e5116);">
+                </div>
+                <div class="flex justify-between text-xs mt-1 text-gray-600">
+                    <span>Less walkable</span>
+                    <span>More walkable</span>
+                </div>
+            </div>
+
+            <!-- MODESHARE LEGEND -->
+            <div id="modeshare-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700" style="display: none;">
+                <h3 class="font-medium mb-2">Mode share</h3>
+                <div class="h-4 w-full rounded"
+                    style="background: linear-gradient(to right, #dce18b, #82ac21, #3e5116);">
+                </div>
+                <div class="flex justify-between text-xs mt-1 text-gray-600">
+                    <span>More car commuters</span>
+                    <span>Fewer car commuters</span>
+                </div>
+            </div>
 
         </div>
 
@@ -368,6 +418,46 @@
             }, labelLayerId);
 
             map.addLayer({
+                id: 'walk',
+                type: 'fill',
+                source: 'walk',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'NatWalkInd'],
+                        0, '#dce18b',
+                        10, '#82ac21', 
+                        20, '#3e5116'
+                    ],
+                    'fill-opacity': 0.7
+                }
+            }, labelLayerId);
+
+            map.addLayer({
+                id: 'modeshare',
+                type: 'fill',
+                source: 'modeshare',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'mdshnocar'],
+                        0, '#dce18b',
+                        5, '#82ac21', 
+                        10, '#3e5116'
+                    ],
+                    'fill-opacity': 0.7
+                }
+            }, labelLayerId);
+
+            map.addLayer({
                 id: 'parcel-outlines',
                 type: 'line',
                 source: 'parcelssimple',
@@ -378,45 +468,41 @@
                 minzoom: 13
             }, labelLayerId);
 
-
             const PRICE_FIELD = 'Listing Price (inflation adjusted 2025 USD)';
 
-map.addLayer({
-  id: 'sales',
-  type: 'circle',
-  source: 'sales',
-  layout: { visibility: 'none' },
-  paint: {
-    // constant size
-    'circle-radius': 6,
-    'circle-opacity': 0.9,
-    'circle-stroke-color': '#ffffff',
-    'circle-stroke-width': 0.75,
+            map.addLayer({
+              id: 'sales',
+              type: 'circle',
+              source: 'sales',
+              layout: { visibility: 'none' },
+              paint: {
+                // constant size
+                'circle-radius': 6,
+                'circle-opacity': 0.9,
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 0.75,
 
-    // color by price using 4 stops
-    'circle-color': [
-      'interpolate', ['linear'],
-      [
-        // numeric price if number, else try to-number on the string; fallback to 100000
-        'coalesce',
-        [
-          'case',
-          ['==', ['typeof', ['get', PRICE_FIELD]], 'number'],
-          ['get', PRICE_FIELD],
-          ['to-number', ['get', PRICE_FIELD]]
-        ],
-        50000
-      ],
-      50000, '#ebe8ff',
-      300000, '#e3b4de',
-      400000, '#a34997',
-      500000, '#6b1352'
-    ]
-  }
-}, labelLayerId);
-
-
-
+                // color by price using 4 stops
+                'circle-color': [
+                  'interpolate', ['linear'],
+                  [
+                    // numeric price if number, else try to-number on the string; fallback to 100000
+                    'coalesce',
+                    [
+                      'case',
+                      ['==', ['typeof', ['get', PRICE_FIELD]], 'number'],
+                      ['get', PRICE_FIELD],
+                      ['to-number', ['get', PRICE_FIELD]]
+                    ],
+                    50000
+                  ],
+                  50000, '#ebe8ff',
+                  300000, '#e3b4de',
+                  400000, '#a34997',
+                  500000, '#6b1352'
+                ]
+              }
+            }, labelLayerId);
 
             map.addLayer({
                 id: 'boundary',
@@ -552,6 +638,28 @@ map.addLayer({
             if (map.getLayer('sales')) map.setLayoutProperty('sales', 'visibility', visible);
         });
 
+        document.getElementById('toggle-walk').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('walk')) map.setLayoutProperty('walk', 'visibility', visible);
+            
+            // Show/hide walk legend
+            const walkLegend = document.getElementById('walk-legend');
+            if (walkLegend) {
+                walkLegend.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+
+        document.getElementById('toggle-modeshare').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('modeshare')) map.setLayoutProperty('modeshare', 'visibility', visible);
+            
+            // Show/hide modeshare legend
+            const modeshareLegend = document.getElementById('modeshare-legend');
+            if (modeshareLegend) {
+                modeshareLegend.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -562,6 +670,8 @@ map.addLayer({
             const idkVisible = document.getElementById('toggle-idkunbuild').checked;
             const unbuildlanduseVisible = document.getElementById('toggle-unbuildlanduse').checked;
             const salesVisible = document.getElementById('toggle-sales').checked;
+            const walkVisible = document.getElementById('toggle-walk').checked;
+            const modeshareVisible = document.getElementById('toggle-modeshare').checked;
 
             map.setStyle(style);
 
@@ -581,6 +691,20 @@ map.addLayer({
                         map.setLayoutProperty('unbuildlanduse', 'visibility', unbuildlanduseVisible ? 'visible' : 'none');
                     if (map.getLayer('sales'))
                         map.setLayoutProperty('sales', 'visibility', salesVisible ? 'visible' : 'none');
+                    if (map.getLayer('walk'))
+                        map.setLayoutProperty('walk', 'visibility', walkVisible ? 'visible' : 'none');
+                    if (map.getLayer('modeshare'))
+                        map.setLayoutProperty('modeshare', 'visibility', modeshareVisible ? 'visible' : 'none');
+                        
+                    // Restore legend visibility
+                    const walkLegend = document.getElementById('walk-legend');
+                    if (walkLegend) {
+                        walkLegend.style.display = walkVisible ? 'block' : 'none';
+                    }
+                    const modeshareLegend = document.getElementById('modeshare-legend');
+                    if (modeshareLegend) {
+                        modeshareLegend.style.display = modeshareVisible ? 'block' : 'none';
+                    }
                 });
             });
         }
