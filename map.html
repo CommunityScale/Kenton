@@ -557,24 +557,46 @@
                 'circle-stroke-color': '#ffffff',
                 'circle-stroke-width': 0.75,
 
-                // color by price using 4 stops
+                // color by price with different ramps based on Housing Type
                 'circle-color': [
-                  'interpolate', ['linear'],
+                  'case',
+                  // If Housing Type is "Single Family", use yellow color ramp
+                  ['==', ['get', 'Housing Type'], 'Single Family'],
                   [
-                    // numeric price if number, else try to-number on the string; fallback to 100000
-                    'coalesce',
+                    'interpolate', ['linear'],
                     [
-                      'case',
-                      ['==', ['typeof', ['get', PRICE_FIELD]], 'number'],
-                      ['get', PRICE_FIELD],
-                      ['to-number', ['get', PRICE_FIELD]]
+                      'coalesce',
+                      [
+                        'case',
+                        ['==', ['typeof', ['get', PRICE_FIELD]], 'number'],
+                        ['get', PRICE_FIELD],
+                        ['to-number', ['get', PRICE_FIELD]]
+                      ],
+                      50000
                     ],
-                    50000
+                    50000, '#f8ffe5',
+                    300000, '#fff290',
+                    400000, '#ecd731',
+                    500000, '#b7a329'
                   ],
-                  50000, '#ebe8ff',
-                  300000, '#e3b4de',
-                  400000, '#a34997',
-                  500000, '#6b1352'
+                  // For all other Housing Types, use original purple color ramp
+                  [
+                    'interpolate', ['linear'],
+                    [
+                      'coalesce',
+                      [
+                        'case',
+                        ['==', ['typeof', ['get', PRICE_FIELD]], 'number'],
+                        ['get', PRICE_FIELD],
+                        ['to-number', ['get', PRICE_FIELD]]
+                      ],
+                      50000
+                    ],
+                    50000, '#ebe8ff',
+                    300000, '#e3b4de',
+                    400000, '#a34997',
+                    500000, '#6b1352'
+                  ]
                 ]
               }
             }, labelLayerId);
