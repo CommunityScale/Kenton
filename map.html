@@ -149,6 +149,7 @@
                         </div>
                         <span class="leading-snug ms-2">Existing land use</span>
                     </label>
+
                     <!-- Overlay Toggle: Sales -->
                     <label class="flex items-start text-sm text-gray-700">
                         <div class="relative">
@@ -159,7 +160,7 @@
                                 class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
                             </div>
                         </div>
-                        <span class="leading-snug ms-2">Recent property sales</span>
+                        <span class="leading-snug ms-2">Recent sales</span>
                     </label>
                 </div>
             </div>
@@ -279,9 +280,25 @@
                 data: 'landuse3.geojson'
             });
 
+
             map.addSource('sales', {
                 type: 'geojson',
-                data: 'rentcast.geojson'
+                data: 'sales3.geojson'
+            });
+
+                        map.addSource('walk', {
+                type: 'geojson',
+                data: 'walkability.geojson'
+            });
+
+                                    map.addSource('modeshare', {
+                type: 'geojson',
+                data: 'modeshare.geojson'
+            });
+
+                                    map.addSource('amenities', {
+                type: 'geojson',
+                data: 'amenities.geojson'
             });
 
             map.addLayer({
@@ -361,21 +378,45 @@
                 minzoom: 13
             }, labelLayerId);
 
-            map.addLayer({
-                id: 'sales',
-                type: 'circle',
-                source: 'sales',
-                layout: {
-                    visibility: 'none'
-                },
-                paint: {
-                    'circle-color': '#FF6B6B',
-                    'circle-radius': 4,
-                    'circle-opacity': 0.8,
-                    'circle-stroke-color': '#FF4444',
-                    'circle-stroke-width': 1
-                }
-            }, labelLayerId);
+
+            const PRICE_FIELD = 'Listing Price (inflation adjusted 2025 USD)';
+
+map.addLayer({
+  id: 'sales',
+  type: 'circle',
+  source: 'sales',
+  layout: { visibility: 'none' },
+  paint: {
+    // constant size
+    'circle-radius': 6,
+    'circle-opacity': 0.9,
+    'circle-stroke-color': '#ffffff',
+    'circle-stroke-width': 0.75,
+
+    // color by price using 4 stops
+    'circle-color': [
+      'interpolate', ['linear'],
+      [
+        // numeric price if number, else try to-number on the string; fallback to 100000
+        'coalesce',
+        [
+          'case',
+          ['==', ['typeof', ['get', PRICE_FIELD]], 'number'],
+          ['get', PRICE_FIELD],
+          ['to-number', ['get', PRICE_FIELD]]
+        ],
+        50000
+      ],
+      50000, '#ebe8ff',
+      300000, '#e3b4de',
+      400000, '#a34997',
+      500000, '#6b1352'
+    ]
+  }
+}, labelLayerId);
+
+
+
 
             map.addLayer({
                 id: 'boundary',
@@ -413,11 +454,11 @@
             map.on('click', 'Lot-Sizes-of-Residential-Parcels', (e) => {
                 const coordinates = e.lngLat;
                 const properties = e.features[0].properties;
-                
+
                 const address = properties.address || 'Address not available';
-                const score2 = properties.score2 !== null && properties.score2 !== undefined ? 
+                const score2 = properties.score2 !== null && properties.score2 !== undefined ?
                     properties.score2.toFixed(2) : 'Not available';
-                
+
                 const popupContent = `
                     <div class="popup-header">Parcel Information</div>
                     <div class="popup-content">
@@ -425,7 +466,32 @@
                         <p><strong>Suitability Score:</strong> ${score2}</p>
                     </div>
                 `;
-                
+
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(popupContent)
+                    .addTo(map);
+            });
+
+            map.on('click', 'sales', (e) => {
+                const coordinates = e.lngLat;
+                const properties = e.features[0].properties;
+
+                const lotSize = properties['Lot Size (Acres)'] || 'Not available';
+                const housingType = properties['Housing Type'] || 'Not available';
+                const propertySize = properties['Property Size (Square Feet)'] || 'Not available';
+                const yearBuilt = properties['Year Built'] || 'Not available';
+
+                const popupContent = `
+                    <div class="popup-header">Sales Information</div>
+                    <div class="popup-content">
+                        <p><strong>Lot Size (Acres):</strong> ${lotSize}</p>
+                        <p><strong>Housing Type:</strong> ${housingType}</p>
+                        <p><strong>Property Size (Square Feet):</strong> ${propertySize}</p>
+                        <p><strong>Year Built:</strong> ${yearBuilt}</p>
+                    </div>
+                `;
+
                 new mapboxgl.Popup()
                     .setLngLat(coordinates)
                     .setHTML(popupContent)
@@ -437,6 +503,14 @@
             });
 
             map.on('mouseleave', 'Lot-Sizes-of-Residential-Parcels', () => {
+                map.getCanvas().style.cursor = '';
+            });
+
+            map.on('mouseenter', 'sales', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'sales', () => {
                 map.getCanvas().style.cursor = '';
             });
 
@@ -457,58 +531,58 @@
         const aboutContent = document.getElementById('about-map-content');
         const aboutArrow = document.getElementById('about-map-arrow');
 
-document.getElementById('toggle-flood').addEventListener('change', (e) => {
-  const visible = e.target.checked ? 'visible' : 'none';
-  if (map.getLayer('flood')) map.setLayoutProperty('flood', 'visibility', visible);
-});
+        document.getElementById('toggle-flood').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('flood')) map.setLayoutProperty('flood', 'visibility', visible);
+        });
 
-document.getElementById('toggle-idkunbuild').addEventListener('change', (e) => {
-  const visible = e.target.checked ? 'visible' : 'none';
-  if (map.getLayer('idkunbuild')) map.setLayoutProperty('idkunbuild', 'visibility', visible);
-});
+        document.getElementById('toggle-idkunbuild').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('idkunbuild')) map.setLayoutProperty('idkunbuild', 'visibility', visible);
+        });
 
-document.getElementById('toggle-unbuildlanduse').addEventListener('change', (e) => {
-  const visible = e.target.checked ? 'visible' : 'none';
-  if (map.getLayer('unbuildlanduse')) map.setLayoutProperty('unbuildlanduse', 'visibility', visible);
-});
+        document.getElementById('toggle-unbuildlanduse').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('unbuildlanduse')) map.setLayoutProperty('unbuildlanduse', 'visibility', visible);
+        });
 
-document.getElementById('toggle-sales').addEventListener('change', (e) => {
-  const visible = e.target.checked ? 'visible' : 'none';
-  if (map.getLayer('sales')) map.setLayoutProperty('sales', 'visibility', visible);
-});
+        document.getElementById('toggle-sales').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('sales')) map.setLayoutProperty('sales', 'visibility', visible);
+        });
 
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
         });
 
-function reloadMapWithStyle(style) {
-  const floodVisible = document.getElementById('toggle-flood').checked;
-  const idkVisible = document.getElementById('toggle-idkunbuild').checked;
-const unbuildlanduseVisible = document.getElementById('toggle-unbuildlanduse').checked;
-  const salesVisible = document.getElementById('toggle-sales').checked;
+        function reloadMapWithStyle(style) {
+            const floodVisible = document.getElementById('toggle-flood').checked;
+            const idkVisible = document.getElementById('toggle-idkunbuild').checked;
+            const unbuildlanduseVisible = document.getElementById('toggle-unbuildlanduse').checked;
+            const salesVisible = document.getElementById('toggle-sales').checked;
 
-  map.setStyle(style);
+            map.setStyle(style);
 
-  map.once('style.load', () => {
-    addMapLayers();
+            map.once('style.load', () => {
+                addMapLayers();
 
-    map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
-      "case", ["boolean", ["feature-state", "hover"], false], 0.7, currentOpacity
-    ]);
+                map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
+                    "case", ["boolean", ["feature-state", "hover"], false], 0.7, currentOpacity
+                ]);
 
-    map.once('idle', () => {
-      if (map.getLayer('flood'))
-        map.setLayoutProperty('flood', 'visibility', floodVisible ? 'visible' : 'none');
-      if (map.getLayer('idkunbuild'))
-        map.setLayoutProperty('idkunbuild', 'visibility', idkVisible ? 'visible' : 'none');
-      if (map.getLayer('unbuildlanduse'))
-        map.setLayoutProperty('unbuildlanduse', 'visibility', unbuildlanduseVisible ? 'visible' : 'none');
-      if (map.getLayer('sales'))
-        map.setLayoutProperty('sales', 'visibility', salesVisible ? 'visible' : 'none');
-    });
-  });
-}
+                map.once('idle', () => {
+                    if (map.getLayer('flood'))
+                        map.setLayoutProperty('flood', 'visibility', floodVisible ? 'visible' : 'none');
+                    if (map.getLayer('idkunbuild'))
+                        map.setLayoutProperty('idkunbuild', 'visibility', idkVisible ? 'visible' : 'none');
+                    if (map.getLayer('unbuildlanduse'))
+                        map.setLayoutProperty('unbuildlanduse', 'visibility', unbuildlanduseVisible ? 'visible' : 'none');
+                    if (map.getLayer('sales'))
+                        map.setLayoutProperty('sales', 'visibility', salesVisible ? 'visible' : 'none');
+                });
+            });
+        }
 
 
         document.getElementById('btn-light').addEventListener('click', () => {
