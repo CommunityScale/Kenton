@@ -215,6 +215,19 @@
                         </div>
                         <span class="leading-snug ms-2">Water service area</span>
                     </label>
+
+                    <!-- Overlay Toggle: Amenities -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-amenities" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Amenities</span>
+                    </label>
                 </div>
             </div>
 
@@ -567,6 +580,55 @@
             }, labelLayerId);
 
             map.addLayer({
+              id: 'amenities',
+              type: 'circle',
+              source: 'amenities',
+              layout: { visibility: 'none' },
+              paint: {
+                // constant size, same as sales
+                'circle-radius': 6,
+                'circle-opacity': 0.9,
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 0.75,
+
+                // color by cat_cs: grocery = #ecd731, healthcare = #F95738, school = #6e79dd, other = transparent
+                'circle-color': [
+                  'match', 
+                  ['get', 'cat_cs'],
+                  'grocery', '#ecd731',
+                  'healthcare', '#F95738',
+                  'school', '#6e79dd',
+                  'rgba(0,0,0,0)' // transparent for other categories
+                ]
+              }
+            }, labelLayerId);
+
+            map.addLayer({
+              id: 'amenities-labels',
+              type: 'symbol',
+              source: 'amenities',
+              layout: { 
+                visibility: 'none',
+                'text-field': ['get', 'name'],
+                'text-font': ['Roboto Regular', 'Arial Unicode MS Regular'],
+                'text-size': 12,
+                'text-offset': [0, 2],
+                'text-anchor': 'top'
+              },
+              paint: {
+                'text-color': '#000000',
+                'text-halo-color': '#ffffff',
+                'text-halo-width': 1
+              },
+              minzoom: 13,
+              filter: [
+                'in',
+                ['get', 'cat_cs'],
+                ['literal', ['grocery', 'healthcare', 'school']]
+              ]
+            }, labelLayerId);
+
+            map.addLayer({
                 id: 'boundary',
                 type: 'line',
                 source: 'boundary',
@@ -732,6 +794,12 @@
             if (map.getLayer('waterservice')) map.setLayoutProperty('waterservice', 'visibility', visible);
         });
 
+        document.getElementById('toggle-amenities').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('amenities')) map.setLayoutProperty('amenities', 'visibility', visible);
+            if (map.getLayer('amenities-labels')) map.setLayoutProperty('amenities-labels', 'visibility', visible);
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -746,6 +814,7 @@
             const modeshareVisible = document.getElementById('toggle-modeshare').checked;
             const sanitaryserviceVisible = document.getElementById('toggle-sanitaryservice').checked;
             const waterserviceVisible = document.getElementById('toggle-waterservice').checked;
+            const amenitiesVisible = document.getElementById('toggle-amenities').checked;
 
             map.setStyle(style);
 
@@ -769,6 +838,10 @@
                         map.setLayoutProperty('unbuildlanduse', 'visibility', unbuildlanduseVisible ? 'visible' : 'none');
                     if (map.getLayer('sales'))
                         map.setLayoutProperty('sales', 'visibility', salesVisible ? 'visible' : 'none');
+                    if (map.getLayer('amenities'))
+                        map.setLayoutProperty('amenities', 'visibility', amenitiesVisible ? 'visible' : 'none');
+                    if (map.getLayer('amenities-labels'))
+                        map.setLayoutProperty('amenities-labels', 'visibility', amenitiesVisible ? 'visible' : 'none');
                     if (map.getLayer('walk'))
                         map.setLayoutProperty('walk', 'visibility', walkVisible ? 'visible' : 'none');
                     if (map.getLayer('modeshare'))
