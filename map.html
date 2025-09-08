@@ -228,6 +228,19 @@
                         </div>
                         <span class="leading-snug ms-2">Amenities</span>
                     </label>
+
+                    <!-- Overlay Toggle: Transit -->
+                    <label class="flex items-start text-sm text-gray-700">
+                        <div class="relative">
+                            <input id="toggle-transit" type="checkbox" class="sr-only peer" />
+                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                            </div>
+                            <div
+                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            </div>
+                        </div>
+                        <span class="leading-snug ms-2">Transit</span>
+                    </label>
                 </div>
             </div>
 
@@ -398,6 +411,11 @@
                                     map.addSource('amenities', {
                 type: 'geojson',
                 data: 'amenities.geojson'
+            });
+
+                                    map.addSource('transit', {
+                type: 'geojson',
+                data: 'transit.geojson'
             });
 
             map.addLayer({
@@ -651,6 +669,20 @@
             }, labelLayerId);
 
             map.addLayer({
+              id: 'transit',
+              type: 'circle',
+              source: 'transit',
+              layout: { visibility: 'none' },
+              paint: {
+                'circle-radius': 6,
+                'circle-opacity': 0.9,
+                'circle-color': '#000000',
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-width': 0.75
+              }
+            }, labelLayerId);
+
+            map.addLayer({
                 id: 'boundary',
                 type: 'line',
                 source: 'boundary',
@@ -822,6 +854,11 @@
             if (map.getLayer('amenities-labels')) map.setLayoutProperty('amenities-labels', 'visibility', visible);
         });
 
+        document.getElementById('toggle-transit').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('transit')) map.setLayoutProperty('transit', 'visibility', visible);
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -837,6 +874,7 @@
             const sanitaryserviceVisible = document.getElementById('toggle-sanitaryservice').checked;
             const waterserviceVisible = document.getElementById('toggle-waterservice').checked;
             const amenitiesVisible = document.getElementById('toggle-amenities').checked;
+            const transitVisible = document.getElementById('toggle-transit').checked;
 
             map.setStyle(style);
 
@@ -868,6 +906,8 @@
                         map.setLayoutProperty('walk', 'visibility', walkVisible ? 'visible' : 'none');
                     if (map.getLayer('modeshare'))
                         map.setLayoutProperty('modeshare', 'visibility', modeshareVisible ? 'visible' : 'none');
+                    if (map.getLayer('transit'))
+                        map.setLayoutProperty('transit', 'visibility', transitVisible ? 'visible' : 'none');
                         
                     // Restore legend visibility
                     const walkLegend = document.getElementById('walk-legend');
