@@ -111,136 +111,152 @@
 
 
                 <!-- Toggle Content -->
-                <div id="overlay-content" class="hidden px-2 py-2 space-y-2 bg-white">
-                    <!-- You will populate this with actual checkboxes later -->
-                    <!-- Overlay Toggle: Flood -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-flood" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                <div id="overlay-content" class="hidden px-2 py-2 space-y-3 bg-white">
+                    
+                    <!-- Inputs Group -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-medium text-gray-800 uppercase tracking-wide">Inputs</h4>
+                        
+                        <!-- Overlay Toggle: Sanitary Service -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-sanitaryservice" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Flood hazard area, 1% and 0.2% annual chance</span>
-                    </label>
-                    <!-- Overlay Toggle: IDK Unbuildable -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-idkunbuild" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
-                            </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Other unbuildable constraints</span>
-                    </label>
+                            <span class="leading-snug ms-2">Sanitary service area</span>
+                        </label>
 
-                    <!-- Overlay Toggle: Land Use -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-unbuildlanduse" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                        <!-- Overlay Toggle: Water Service -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-waterservice" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Priority non-residential land use</span>
-                    </label>
+                            <span class="leading-snug ms-2">Water service area</span>
+                        </label>
 
-                    <!-- Overlay Toggle: Sales -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-sales" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                        <!-- Overlay Toggle: Walk -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-walk" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Recent sales</span>
-                    </label>
+                            <span class="leading-snug ms-2">Walkability</span>
+                        </label>
 
-                    <!-- Overlay Toggle: Walk -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-walk" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                        <!-- Overlay Toggle: Amenities -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-amenities" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Walkability</span>
-                    </label>
+                            <span class="leading-snug ms-2">Amenities</span>
+                        </label>
 
-                    <!-- Overlay Toggle: Modeshare -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-modeshare" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                        <!-- Overlay Toggle: Transit -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-transit" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Mode share</span>
-                    </label>
+                            <span class="leading-snug ms-2">Transit</span>
+                        </label>
 
-                    <!-- Overlay Toggle: Sanitary Service -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-sanitaryservice" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                        <!-- Overlay Toggle: Modeshare -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-modeshare" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Sanitary service area</span>
-                    </label>
+                            <span class="leading-snug ms-2">Mode share</span>
+                        </label>
+                    </div>
 
-                    <!-- Overlay Toggle: Water Service -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-waterservice" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                    <!-- Unbuildable Group -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-medium text-gray-800 uppercase tracking-wide">Unbuildable</h4>
+                        
+                        <!-- Overlay Toggle: Flood -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-flood" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Water service area</span>
-                    </label>
+                            <span class="leading-snug ms-2">Flood hazard area, 1% and 0.2% annual chance</span>
+                        </label>
 
-                    <!-- Overlay Toggle: Amenities -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-amenities" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                        <!-- Overlay Toggle: Land Use -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-unbuildlanduse" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
-                            </div>
-                        </div>
-                        <span class="leading-snug ms-2">Amenities</span>
-                    </label>
+                            <span class="leading-snug ms-2">Priority non-residential land use</span>
+                        </label>
 
-                    <!-- Overlay Toggle: Transit -->
-                    <label class="flex items-start text-sm text-gray-700">
-                        <div class="relative">
-                            <input id="toggle-transit" type="checkbox" class="sr-only peer" />
-                            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                        <!-- Overlay Toggle: IDK Unbuildable -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-idkunbuild" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                            <div
-                                class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                            <span class="leading-snug ms-2">Other unbuildable constraints</span>
+                        </label>
+                    </div>
+
+                    <!-- Context Group -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-medium text-gray-800 uppercase tracking-wide">Context</h4>
+                        
+                        <!-- Overlay Toggle: Sales -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-sales" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
                             </div>
-                        </div>
-                        <span class="leading-snug ms-2">Transit</span>
-                    </label>
+                            <span class="leading-snug ms-2">Recent sales</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
