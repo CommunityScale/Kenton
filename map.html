@@ -256,6 +256,19 @@
                             </div>
                             <span class="leading-snug ms-2">Recent sales</span>
                         </label>
+
+                        <!-- Overlay Toggle: Value per acre -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-valperacre" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
+                            </div>
+                            <span class="leading-snug ms-2">Value per acre</span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -324,6 +337,37 @@
                 <div class="flex justify-between text-xs mt-1 text-gray-600">
                     <span>More car commuters</span>
                     <span>Fewer car commuters</span>
+                </div>
+            </div>
+
+            <!-- VALPERACRE LEGEND -->
+            <div id="valperacre-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700" style="display: none;">
+                <h3 class="font-medium mb-2">Value per acre</h3>
+                <div class="space-y-1 text-xs mt-2 text-gray-600">
+                    <div class="flex justify-between">
+                        <span>$0 - $200k</span>
+                        <span style="color: #d0d1e6;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>$200k - $400k</span>
+                        <span style="color: #a6bddb;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>$400k - $600k</span>
+                        <span style="color: #67a9cf;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>$600k - $1M</span>
+                        <span style="color: #3690c0;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>$1M - $1.2M</span>
+                        <span style="color: #02818a;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>$1.2M+</span>
+                        <span style="color: #016450;">■</span>
+                    </div>
                 </div>
             </div>
 
@@ -432,6 +476,11 @@
                                     map.addSource('transit', {
                 type: 'geojson',
                 data: 'transit.geojson'
+            });
+
+            map.addSource('valperacre', {
+                type: 'geojson',
+                data: 'valperacre2.geojson'
             });
 
             map.addLayer({
@@ -566,6 +615,29 @@
                 }
             }, labelLayerId);
 
+                        map.addLayer({
+                id: 'valperacre',
+                type: 'fill',
+                source: 'valperacre',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': [
+                        "case", ["==", ["get", "valperac"], null], 'white',
+                        ["interpolate", ["linear"], ["get", "valperac"],
+                            0, lotSizePalette[2],
+                            200000, lotSizePalette[3],
+                            400000, lotSizePalette[4],
+                            600000, lotSizePalette[5],
+                            1000000, lotSizePalette[6],
+                            1200000, lotSizePalette[7]
+                        ]
+                    ],
+                    'fill-opacity': 1
+                }
+            }, labelLayerId);
+
             map.addLayer({
                 id: 'parcel-outlines',
                 type: 'line',
@@ -697,6 +769,8 @@
                 'circle-stroke-width': 0.75
               }
             }, labelLayerId);
+
+
 
             map.addLayer({
                 id: 'boundary',
@@ -875,6 +949,17 @@
             if (map.getLayer('transit')) map.setLayoutProperty('transit', 'visibility', visible);
         });
 
+        document.getElementById('toggle-valperacre').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('valperacre')) map.setLayoutProperty('valperacre', 'visibility', visible);
+            
+            // Show/hide valperacre legend
+            const valperacreLegend = document.getElementById('valperacre-legend');
+            if (valperacreLegend) {
+                valperacreLegend.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -891,6 +976,7 @@
             const waterserviceVisible = document.getElementById('toggle-waterservice').checked;
             const amenitiesVisible = document.getElementById('toggle-amenities').checked;
             const transitVisible = document.getElementById('toggle-transit').checked;
+            const valperacreVisible = document.getElementById('toggle-valperacre').checked;
 
             map.setStyle(style);
 
@@ -924,6 +1010,8 @@
                         map.setLayoutProperty('modeshare', 'visibility', modeshareVisible ? 'visible' : 'none');
                     if (map.getLayer('transit'))
                         map.setLayoutProperty('transit', 'visibility', transitVisible ? 'visible' : 'none');
+                    if (map.getLayer('valperacre'))
+                        map.setLayoutProperty('valperacre', 'visibility', valperacreVisible ? 'visible' : 'none');
                         
                     // Restore legend visibility
                     const walkLegend = document.getElementById('walk-legend');
@@ -933,6 +1021,10 @@
                     const modeshareLegend = document.getElementById('modeshare-legend');
                     if (modeshareLegend) {
                         modeshareLegend.style.display = modeshareVisible ? 'block' : 'none';
+                    }
+                    const valperacreLegend = document.getElementById('valperacre-legend');
+                    if (valperacreLegend) {
+                        valperacreLegend.style.display = valperacreVisible ? 'block' : 'none';
                     }
                 });
             });
