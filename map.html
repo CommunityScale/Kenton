@@ -371,6 +371,74 @@
                 </div>
             </div>
 
+            <!-- AMENITIES LEGEND -->
+            <div id="amenities-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700" style="display: none;">
+                <h3 class="font-medium mb-2">Amenities</h3>
+                <div class="space-y-1 text-xs mt-2 text-gray-600">
+                    <div class="flex justify-between">
+                        <span>Grocery</span>
+                        <span style="color: #ecd731;">●</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Healthcare</span>
+                        <span style="color: #F95738;">●</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>School</span>
+                        <span style="color: #6e79dd;">●</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SALES LEGEND -->
+            <div id="sales-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700" style="display: none;">
+                <h3 class="font-medium mb-2">Recent sales</h3>
+                <div class="space-y-2 text-xs mt-2 text-gray-600">
+                    <div>
+                        <div class="font-medium mb-1">Single Family</div>
+                        <div class="space-y-1 ml-2">
+                            <div class="flex justify-between">
+                                <span>$50k - $300k</span>
+                                <span style="color: #f8ffe5;">●</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>$300k - $400k</span>
+                                <span style="color: #fff290;">●</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>$400k - $500k</span>
+                                <span style="color: #ecd731;">●</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>$500k+</span>
+                                <span style="color: #b7a329;">●</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="font-medium mb-1">Other Housing Types</div>
+                        <div class="space-y-1 ml-2">
+                            <div class="flex justify-between">
+                                <span>$50k - $300k</span>
+                                <span style="color: #ebe8ff;">●</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>$300k - $400k</span>
+                                <span style="color: #e3b4de;">●</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>$400k - $500k</span>
+                                <span style="color: #a34997;">●</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>$500k+</span>
+                                <span style="color: #6b1352;">●</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
@@ -904,6 +972,12 @@
         document.getElementById('toggle-sales').addEventListener('change', (e) => {
             const visible = e.target.checked ? 'visible' : 'none';
             if (map.getLayer('sales')) map.setLayoutProperty('sales', 'visibility', visible);
+            
+            // Show/hide sales legend
+            const salesLegend = document.getElementById('sales-legend');
+            if (salesLegend) {
+                salesLegend.style.display = e.target.checked ? 'block' : 'none';
+            }
         });
 
         document.getElementById('toggle-walk').addEventListener('change', (e) => {
@@ -942,6 +1016,12 @@
             const visible = e.target.checked ? 'visible' : 'none';
             if (map.getLayer('amenities')) map.setLayoutProperty('amenities', 'visibility', visible);
             if (map.getLayer('amenities-labels')) map.setLayoutProperty('amenities-labels', 'visibility', visible);
+            
+            // Show/hide amenities legend
+            const amenitiesLegend = document.getElementById('amenities-legend');
+            if (amenitiesLegend) {
+                amenitiesLegend.style.display = e.target.checked ? 'block' : 'none';
+            }
         });
 
         document.getElementById('toggle-transit').addEventListener('change', (e) => {
@@ -1025,6 +1105,14 @@
                     const valperacreLegend = document.getElementById('valperacre-legend');
                     if (valperacreLegend) {
                         valperacreLegend.style.display = valperacreVisible ? 'block' : 'none';
+                    }
+                    const amenitiesLegend = document.getElementById('amenities-legend');
+                    if (amenitiesLegend) {
+                        amenitiesLegend.style.display = amenitiesVisible ? 'block' : 'none';
+                    }
+                    const salesLegend = document.getElementById('sales-legend');
+                    if (salesLegend) {
+                        salesLegend.style.display = salesVisible ? 'block' : 'none';
                     }
                 });
             });
