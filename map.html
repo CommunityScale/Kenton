@@ -346,27 +346,27 @@
                 <div class="space-y-1 text-xs mt-2 text-gray-600">
                     <div class="flex justify-between">
                         <span>$0 - $200k</span>
-                        <span style="color: #d0d1e6;">■</span>
+                        <span style="color: #ebe8fd;">■</span>
                     </div>
                     <div class="flex justify-between">
                         <span>$200k - $400k</span>
-                        <span style="color: #a6bddb;">■</span>
+                        <span style="color: #dbb7da;">■</span>
                     </div>
                     <div class="flex justify-between">
                         <span>$400k - $600k</span>
-                        <span style="color: #67a9cf;">■</span>
+                        <span style="color: #bf88bb;">■</span>
                     </div>
                     <div class="flex justify-between">
                         <span>$600k - $1M</span>
-                        <span style="color: #3690c0;">■</span>
+                        <span style="color: #975391;">■</span>
                     </div>
                     <div class="flex justify-between">
                         <span>$1M - $1.2M</span>
-                        <span style="color: #02818a;">■</span>
+                        <span style="color: #62204f;">■</span>
                     </div>
                     <div class="flex justify-between">
                         <span>$1.2M+</span>
-                        <span style="color: #016450;">■</span>
+                        <span style="color: #420d31;">■</span>
                     </div>
                 </div>
             </div>
@@ -480,7 +480,7 @@
 
             map.addSource('valperacre', {
                 type: 'geojson',
-                data: 'valperacre2.geojson'
+                data: 'valperacre3.geojson'
             });
 
             map.addLayer({
@@ -624,14 +624,14 @@
                 },
                 paint: {
                     'fill-color': [
-                        "case", ["==", ["get", "valperac"], null], 'white',
-                        ["interpolate", ["linear"], ["get", "valperac"],
-                            0, lotSizePalette[2],
-                            200000, lotSizePalette[3],
-                            400000, lotSizePalette[4],
-                            600000, lotSizePalette[5],
-                            1000000, lotSizePalette[6],
-                            1200000, lotSizePalette[7]
+                        "case", ["==", ["get", "ValPerAcre"], null], 'white',
+                        ["interpolate", ["linear"], ["get", "ValPerAcre"],
+                            0, '#ebe8fd',
+                            200000, '#dbb7da',
+                            400000, '#bf88bb',
+                            600000, '#975391',
+                            1000000, '#62204f',
+                            1200000, '#420d31'
                         ]
                     ],
                     'fill-opacity': 1
