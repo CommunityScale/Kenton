@@ -369,7 +369,7 @@
         function addMapLayers() {
             map.addSource('parcels', {
                 type: 'geojson',
-                data: 'Parcels_with_addresses.geojson'
+                data: 'Parcels_with_addresses2.geojson'
             });
 
             map.addSource('parcelssimple', {
@@ -440,16 +440,16 @@
                 source: 'parcels',
                 paint: {
                     'fill-color': [
-                        "case", ["==", ["get", "score2"], null], 'white',
-                        ["interpolate", ["linear"], ["get", "score2"],
+                        "case", ["==", ["get", "score3"], null], 'white',
+                        ["interpolate", ["linear"], ["get", "score3"],
                             0, lotSizePalette[0],
                             2, lotSizePalette[1],
-                            2.25, lotSizePalette[2],
-                            2.5, lotSizePalette[3],
-                            3, lotSizePalette[4],
-                            3.5, lotSizePalette[5],
-                            4.5, lotSizePalette[6],
-                            5.5, lotSizePalette[7]
+                            3, lotSizePalette[2],
+                            3.5, lotSizePalette[3],
+                            4, lotSizePalette[4],
+                            4.5, lotSizePalette[5],
+                            5.5, lotSizePalette[6],
+                            6.5, lotSizePalette[7]
                         ]
                     ],
                     'fill-opacity': [
@@ -736,14 +736,14 @@
                 const properties = e.features[0].properties;
 
                 const address = properties.address || 'Address not available';
-                const score2 = properties.score2 !== null && properties.score2 !== undefined ?
-                    properties.score2.toFixed(2) : 'Not available';
+                const score3 = properties.score3 !== null && properties.score3 !== undefined ?
+                    properties.score3.toFixed(2) : 'Not available';
 
                 const popupContent = `
                     <div class="popup-header">Parcel Information</div>
                     <div class="popup-content">
                         <p><strong>Address:</strong> ${address}</p>
-                        <p><strong>Suitability Score:</strong> ${score2}</p>
+                        <p><strong>Suitability Score:</strong> ${score3}</p>
                     </div>
                 `;
 
