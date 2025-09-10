@@ -531,23 +531,19 @@
                 <div class="space-y-1 text-xs mt-2 text-gray-600">
                     <div class="flex justify-between">
                         <span>1</span>
-                        <span style="color: #ebe8fd;">■</span>
+                        <span style="color: #f6f3d8;">■</span>
                     </div>
                     <div class="flex justify-between">
                         <span>10</span>
-                        <span style="color: #ddb6db;">■</span>
+                        <span style="color: #fff298;">■</span>
                     </div>
                     <div class="flex justify-between">
                         <span>25</span>
-                        <span style="color: #bf88bb;">■</span>
+                        <span style="color: #ebd74a;">■</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>50</span>
-                        <span style="color: #975391;">■</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>100+</span>
-                        <span style="color: #62204f;">■</span>
+                        <span>50+</span>
+                        <span style="color: #b6a33a;">■</span>
                     </div>
                 </div>
             </div>
@@ -827,14 +823,14 @@
                             'interpolate',
                             ['linear'],
                             ['get', 'DUAC'],
-                            1, '#ebe8fd',
-                            10, '#ddb6db', 
-                            25, '#bf88bb',
-                            50, '#975391',
-                            100, '#62204f'
+                            1, '#f6f3d8',
+                            10, '#fff298',
+                            25, '#ebd74a',
+                            50, '#b6a33a'
                         ]
                     ],
-                    'fill-opacity': 0.7
+                    'fill-opacity': 0.7,
+                    'fill-outline-color': 'black'
                 }
             }, labelLayerId);
 
@@ -1220,7 +1216,9 @@
 
         document.getElementById('toggle-dua').addEventListener('change', (e) => {
             const visible = e.target.checked ? 'visible' : 'none';
+            const zoningChecked = document.getElementById('toggle-zoning').checked;
             if (map.getLayer('dua')) map.setLayoutProperty('dua', 'visibility', visible);
+            if (map.getLayer('zoning-labels')) map.setLayoutProperty('zoning-labels', 'visibility', (e.target.checked || zoningChecked) ? 'visible' : 'none');
             
             // Show/hide dua legend
             const duaLegend = document.getElementById('dua-legend');
@@ -1269,8 +1267,9 @@
 
         document.getElementById('toggle-zoning').addEventListener('change', (e) => {
             const visible = e.target.checked ? 'visible' : 'none';
+            const duaChecked = document.getElementById('toggle-dua').checked;
             if (map.getLayer('zoning')) map.setLayoutProperty('zoning', 'visibility', visible);
-            if (map.getLayer('zoning-labels')) map.setLayoutProperty('zoning-labels', 'visibility', visible);
+            if (map.getLayer('zoning-labels')) map.setLayoutProperty('zoning-labels', 'visibility', (e.target.checked || duaChecked) ? 'visible' : 'none');
             
             // Show/hide zoning legend
             const zoningLegend = document.getElementById('zoning-legend');
@@ -1337,6 +1336,8 @@
                         map.setLayoutProperty('modeshare', 'visibility', modeshareVisible ? 'visible' : 'none');
                     if (map.getLayer('dua'))
                         map.setLayoutProperty('dua', 'visibility', duaVisible ? 'visible' : 'none');
+                    if (map.getLayer('zoning-labels') && duaVisible)
+                        map.setLayoutProperty('zoning-labels', 'visibility', 'visible');
                     if (map.getLayer('transit'))
                         map.setLayoutProperty('transit', 'visibility', transitVisible ? 'visible' : 'none');
                     if (map.getLayer('valperacre'))
@@ -1344,7 +1345,7 @@
                     if (map.getLayer('zoning'))
                         map.setLayoutProperty('zoning', 'visibility', zoningVisible ? 'visible' : 'none');
                     if (map.getLayer('zoning-labels'))
-                        map.setLayoutProperty('zoning-labels', 'visibility', zoningVisible ? 'visible' : 'none');
+                        map.setLayoutProperty('zoning-labels', 'visibility', (zoningVisible || duaVisible) ? 'visible' : 'none');
                     if (map.getLayer('cities'))
                         map.setLayoutProperty('cities', 'visibility', citiesVisible ? 'visible' : 'none');
                         
