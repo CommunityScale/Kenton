@@ -1,0 +1,121 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.40.8-Bratislava">
+  <identifier>Zoning_KC_SDE_Update_10_27_21_F</identifier>
+  <parentidentifier></parentidentifier>
+  <language>ENG</language>
+  <type>dataset</type>
+  <title>KC_zoning</title>
+  <abstract>This data set represents the zoning for Kenton County. The data set was created by LINK-GIS/PDS and PDS staff shall serve as the official record holder of the Official Zoning Map for the [City/County]. However, the [City/County] has the duty to keep records and actions of their activities and provide a copy to PDS staff. The zoning regulations and districts established in the Ordinance have been prepared in accordance with the adopted Kenton County comprehensive plan to promote the public health, safety, morals, and general welfare of the [City/County], to facilitate orderly and harmonious development and the visual or historical character of the [City/County], and to regulate the density of population and intensity of land use in order to provide for adequate light and air. This Ordinance has been prepared to facilitate fire and police protection; to prevent the overcrowding of land, occurrence of blight and congestion in the circulation of people and commodities; to protect public health and safety and prevent the loss of life, health, or property from fire, flood, or other dangers; and to protect highways and other transportation facilities, public facilities including schools and public grounds, business districts, natural resources and other specific areas of the [City/County] in need of special protection. 
+Data Product is primarily intended for display, analysis, planning purposes, community development projects, and GIS-related analyses. The data contained in this data product are not intended for property taxation purposes. This Data Product is stored, edited and maintained as polygon geometry. The Kenton County Zoning data may change at any time, with or without notice. 
+
+This data set represents the zoning for Kenton County. The data set was created by LINK-GIS/PDS and PDS staff shall serve as the official record holder of the Official Zoning Map for the [City/County]. However, the [City/County] has the duty to keep records and actions of their activities and provide a copy to PDS staff. The zoning regulations and districts established in the Ordinance have been prepared in accordance with the adopted Kenton County comprehensive plan to promote the public health, safety, morals, and general welfare of the [City/County], to facilitate orderly and harmonious development and the visual or historical character of the [City/County], and to regulate the density of population and intensity of land use in order to provide for adequate light and air. This Ordinance has been prepared to facilitate fire and police protection; to prevent the overcrowding of land, occurrence of blight and congestion in the circulation of people and commodities; to protect public health and safety and prevent the loss of life, health, or property from fire, flood, or other dangers; and to protect highways and other transportation facilities, public facilities including schools and public grounds, business districts, natural resources and other specific areas of the [City/County] in need of special protection. Data Product is primarily intended for display, analysis, planning purposes, community development projects, and GIS-related analyses. The data contained in this data product are not intended for property taxation purposes. This Data Product is stored, edited and maintained as polygon geometry. The Kenton County Zoning data may change at any time, with or without notice. 
+
+This data set represents the zoning for Kenton County. The data set was created by the NKAPC. This data was then re-evaluated and adjusted in 2013 based on updated geometry of the parcel layer.
+
+Zoning within Kenton County. Changes made due to data quality update.
+
+More detailed information may be found at http://nkapc.org/zoning.html</abstract>
+  <keywords vocabulary="Search keys">
+    <keyword>Kenton County</keyword>
+    <keyword>Kentucky</keyword>
+    <keyword>Zoning</keyword>
+    <keyword>Planning</keyword>
+    <keyword>Ordinance</keyword>
+    <keyword>Planning Department</keyword>
+    <keyword>Zoning districts</keyword>
+    <keyword>Standard districts</keyword>
+    <keyword>Residential Districts</keyword>
+    <keyword>Commercial Districts</keyword>
+    <keyword>Employment Districts</keyword>
+    <keyword>Special districts</keyword>
+    <keyword>Comprehensive Plan</keyword>
+    <keyword>Overlay</keyword>
+    <keyword>Planning</keyword>
+    <keyword>LINK-GIS</keyword>
+    <keyword>Planning and Development Services of Kenton County (PDS)</keyword>
+  </keywords>
+  <keywords vocabulary="gmd:topicCategory">
+    <keyword>Zoning</keyword>
+    <keyword>Planning</keyword>
+    <keyword>Ordinance</keyword>
+    <keyword>Planning Department</keyword>
+    <keyword>Zoning districts</keyword>
+    <keyword>Standard districts</keyword>
+    <keyword>Residential Districts</keyword>
+    <keyword>Commercial Districts</keyword>
+    <keyword>Employment Districts</keyword>
+    <keyword>Special districts</keyword>
+    <keyword>Comprehensive Plan</keyword>
+    <keyword>Overlay</keyword>
+    <keyword>KC_Zoning</keyword>
+    <keyword> zoning</keyword>
+    <keyword> zones</keyword>
+  </keywords>
+  <contact>
+    <contactAddress>
+      <type>physical</type>
+      <address>1840 Simon Kenton Way</address>
+      <city>Covington</city>
+      <administrativearea>KY</administrativearea>
+      <postalcode>41011</postalcode>
+      <country>US</country>
+    </contactAddress>
+    <name>Director of LINK-GIS  </name>
+    <organization>LINK-GIS, managed by Planning and Development Services of Kenton County </organization>
+    <position>Director of LINK-GIS  </position>
+    <voice>859.331.8980</voice>
+    <fax></fax>
+    <email>GIS02@pdskc.org </email>
+    <role>Point of contact</role>
+  </contact>
+  <contact>
+    <contactAddress>
+      <type>mailing and physical address</type>
+      <address>2332 Royal Dr.</address>
+      <city>Fort Mitchell</city>
+      <administrativearea>Kentucky</administrativearea>
+      <postalcode>41017</postalcode>
+      <country>USA</country>
+    </contactAddress>
+    <name>LINK GIS</name>
+    <organization>LINK GIS</organization>
+    <position></position>
+    <voice>859 331 8980</voice>
+    <fax>(859) 331-8987</fax>
+    <email>GIS01@nkapc.org </email>
+    <role>Point of contact</role>
+  </contact>
+  <links>
+    <link name="Shapefile" type="Local Area Network" url="file://\\sol\standard\planetgis\Kenton\LandRecords\KC_zoning.shp" format="" description="" size="" mimeType=""/>
+  </links>
+  <dates/>
+  <fees></fees>
+  <constraints type="Limitations of use">All Users hereby acknowledge that PDS, LINK-GIS and any, or all, of its partners or employees accept no liability for use of this Data Product. These Data Products have not been prepared for, and are not suitable for engineering, or surveying purposes. Generally, these Data Products do not represent on-the-ground surveys, but rather represent the approximate relative location of boundaries and features. These Data Products are for general planning purposes only, no other intent is implied. Products should not be used for making financial or any other commitments. PDS, LINK-GIS and any, or all, of its partners or employees provide these Data Products with the understanding that they are not guaranteed to be accurate, correct or complete and conclusions drawn from the Data Products are the responsibility of the User. While every effort has been made to ensure the accuracy, correctness and timeliness of materials presented anywhere within the Data Products, PDS, LINK-GIS and any, or all, of its partners or employees assumes no responsibility for errors or omissions, even if advised of the possibility of such damage.</constraints>
+  <constraints type="Security constraints"></constraints>
+  <constraints type="Access">LINK-GIS value added data, LINK-GIS and any of its partners or employees accept no liability for use of this data</constraints>
+  <rights>LINK-GIS, Planning and Development Services of Kenton County (PDS)</rights>
+  <rights>LINK-GIS value added data, LINK-GIS and any of its partners or employees accept no liability for use of this data</rights>
+  <encoding></encoding>
+  <crs>
+    <spatialrefsys nativeFormat="Wkt">
+      <wkt>PROJCRS["NAD83(HARN) / Kentucky North (ftUS)",BASEGEOGCRS["NAD83(HARN)",DATUM["NAD83 (High Accuracy Reference Network)",ELLIPSOID["GRS 1980",6378137,298.257222101,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],ID["EPSG",4152]],CONVERSION["SPCS83 Kentucky North zone (US survey foot)",METHOD["Lambert Conic Conformal (2SP)",ID["EPSG",9802]],PARAMETER["Latitude of false origin",37.5,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8821]],PARAMETER["Longitude of false origin",-84.25,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8822]],PARAMETER["Latitude of 1st standard parallel",37.9666666666667,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8823]],PARAMETER["Latitude of 2nd standard parallel",38.9666666666667,ANGLEUNIT["degree",0.0174532925199433],ID["EPSG",8824]],PARAMETER["Easting at false origin",1640416.667,LENGTHUNIT["US survey foot",0.304800609601219],ID["EPSG",8826]],PARAMETER["Northing at false origin",0,LENGTHUNIT["US survey foot",0.304800609601219],ID["EPSG",8827]]],CS[Cartesian,2],AXIS["easting (X)",east,ORDER[1],LENGTHUNIT["US survey foot",0.304800609601219]],AXIS["northing (Y)",north,ORDER[2],LENGTHUNIT["US survey foot",0.304800609601219]],USAGE[SCOPE["Engineering survey, topographic mapping."],AREA["United States (USA) - Kentucky - counties of Anderson; Bath; Boone; Bourbon; Boyd; Bracken; Bullitt; Campbell; Carroll; Carter; Clark; Elliott; Fayette; Fleming; Franklin; Gallatin; Grant; Greenup; Harrison; Henry; Jefferson; Jessamine; Kenton; Lawrence; Lewis; Mason; Menifee; Montgomery; Morgan; Nicholas; Oldham; Owen; Pendleton; Robertson; Rowan; Scott; Shelby; Spencer; Trimble; Woodford."],BBOX[37.71,-85.96,39.15,-82.47]],ID["EPSG",2891]]</wkt>
+      <proj4>+proj=lcc +lat_0=37.5 +lon_0=-84.25 +lat_1=37.9666666666667 +lat_2=38.9666666666667 +x_0=500000.0001016 +y_0=0 +ellps=GRS80 +units=us-ft +no_defs</proj4>
+      <srsid>860</srsid>
+      <srid>2891</srid>
+      <authid>EPSG:2891</authid>
+      <description>NAD83(HARN) / Kentucky North (ftUS)</description>
+      <projectionacronym>lcc</projectionacronym>
+      <ellipsoidacronym>EPSG:7019</ellipsoidacronym>
+      <geographicflag>false</geographicflag>
+    </spatialrefsys>
+  </crs>
+  <extent>
+    <spatial minz="0" dimensions="2" maxx="-84.41769999999999641" minx="-84.62359999999999616" maxy="39.10020000000000095" crs="EPSG:2891" miny="38.78990000000000293" maxz="0"/>
+    <temporal>
+      <period>
+        <start></start>
+        <end></end>
+      </period>
+    </temporal>
+  </extent>
+</qgis>

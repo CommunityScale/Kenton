@@ -280,7 +280,7 @@
                                     class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
                                 </div>
                             </div>
-                            <span class="leading-snug ms-2">Zoning</span>
+                            <span class="leading-snug ms-2">Zoning (Summarized)</span>
                         </label>
 
                         <!-- Overlay Toggle: Cities -->
@@ -294,6 +294,19 @@
                                 </div>
                             </div>
                             <span class="leading-snug ms-2">Cities</span>
+                        </label>
+
+                        <!-- Overlay Toggle: DUA -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-dua" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
+                            </div>
+                            <span class="leading-snug ms-2">Dwelling units per acre allowed by zoning (Simplified)</span>
                         </label>
                     </div>
                 </div>
@@ -512,6 +525,33 @@
                 </div>
             </div>
 
+            <!-- DUA LEGEND -->
+            <div id="dua-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700" style="display: none;">
+                <h3 class="font-medium mb-2">Dwelling units per acre</h3>
+                <div class="space-y-1 text-xs mt-2 text-gray-600">
+                    <div class="flex justify-between">
+                        <span>1</span>
+                        <span style="color: #ebe8fd;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>10</span>
+                        <span style="color: #ddb6db;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>25</span>
+                        <span style="color: #bf88bb;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>50</span>
+                        <span style="color: #975391;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>100+</span>
+                        <span style="color: #62204f;">■</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
@@ -632,6 +672,11 @@
                         map.addSource('cities', {
                 type: 'geojson',
                 data: 'Ky_City_Boundary_Polygon.geojson'
+            });
+
+            map.addSource('dua', {
+                type: 'geojson',
+                data: 'dua.geojson'
             });
 
             map.addLayer({
@@ -762,6 +807,32 @@
                         0, '#dce18b',
                         5, '#82ac21', 
                         10, '#3e5116'
+                    ],
+                    'fill-opacity': 0.7
+                }
+            }, labelLayerId);
+
+            map.addLayer({
+                id: 'dua',
+                type: 'fill',
+                source: 'dua',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': [
+                        'case',
+                        ['==', ['get', 'DUAC'], null], 'rgba(0,0,0,0)',
+                        [
+                            'interpolate',
+                            ['linear'],
+                            ['get', 'DUAC'],
+                            1, '#ebe8fd',
+                            10, '#ddb6db', 
+                            25, '#bf88bb',
+                            50, '#975391',
+                            100, '#62204f'
+                        ]
                     ],
                     'fill-opacity': 0.7
                 }
@@ -1147,6 +1218,17 @@
             }
         });
 
+        document.getElementById('toggle-dua').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('dua')) map.setLayoutProperty('dua', 'visibility', visible);
+            
+            // Show/hide dua legend
+            const duaLegend = document.getElementById('dua-legend');
+            if (duaLegend) {
+                duaLegend.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+
         document.getElementById('toggle-sanitaryservice').addEventListener('change', (e) => {
             const visible = e.target.checked ? 'visible' : 'none';
             if (map.getLayer('sanitaryservice')) map.setLayoutProperty('sanitaryservice', 'visibility', visible);
@@ -1214,6 +1296,7 @@
             const salesVisible = document.getElementById('toggle-sales').checked;
             const walkVisible = document.getElementById('toggle-walk').checked;
             const modeshareVisible = document.getElementById('toggle-modeshare').checked;
+            const duaVisible = document.getElementById('toggle-dua').checked;
             const sanitaryserviceVisible = document.getElementById('toggle-sanitaryservice').checked;
             const waterserviceVisible = document.getElementById('toggle-waterservice').checked;
             const amenitiesVisible = document.getElementById('toggle-amenities').checked;
@@ -1252,6 +1335,8 @@
                         map.setLayoutProperty('walk', 'visibility', walkVisible ? 'visible' : 'none');
                     if (map.getLayer('modeshare'))
                         map.setLayoutProperty('modeshare', 'visibility', modeshareVisible ? 'visible' : 'none');
+                    if (map.getLayer('dua'))
+                        map.setLayoutProperty('dua', 'visibility', duaVisible ? 'visible' : 'none');
                     if (map.getLayer('transit'))
                         map.setLayoutProperty('transit', 'visibility', transitVisible ? 'visible' : 'none');
                     if (map.getLayer('valperacre'))
@@ -1287,6 +1372,10 @@
                     const zoningLegend = document.getElementById('zoning-legend');
                     if (zoningLegend) {
                         zoningLegend.style.display = zoningVisible ? 'block' : 'none';
+                    }
+                    const duaLegend = document.getElementById('dua-legend');
+                    if (duaLegend) {
+                        duaLegend.style.display = duaVisible ? 'block' : 'none';
                     }
                 });
             });
