@@ -271,7 +271,7 @@
                         </label>
 
                         <!-- Overlay Toggle: Zoning -->
-                        <!-- <label class="flex items-start text-sm text-gray-700">
+                        <label class="flex items-start text-sm text-gray-700">
                             <div class="relative">
                                 <input id="toggle-zoning" type="checkbox" class="sr-only peer" />
                                 <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
@@ -281,7 +281,7 @@
                                 </div>
                             </div>
                             <span class="leading-snug ms-2">Zoning</span>
-                        </label> -->
+                        </label>
                     </div>
                 </div>
             </div>
@@ -452,6 +452,53 @@
                 </div>
             </div>
 
+            <!-- ZONING LEGEND -->
+            <div id="zoning-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700" style="display: none;">
+                <h3 class="font-medium mb-2">Zoning</h3>
+                <div class="space-y-1 text-xs mt-2 text-gray-600">
+                    <div class="flex justify-between">
+                        <span>Residential - low</span>
+                        <span style="color: #fff8bf;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Residential - middle</span>
+                        <span style="color: #ffd489;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Residential - high</span>
+                        <span style="color: #ffa631;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Commercial</span>
+                        <span style="color: #ff6969;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Industrial</span>
+                        <span style="color: #767676;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Agricultural</span>
+                        <span style="color: #d2c698;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Mixed-use</span>
+                        <span style="color: #d899dd;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Planned Unit Development</span>
+                        <span style="color: #0ec1e1;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Open space</span>
+                        <span style="color: #d4f088;">■</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Public Facilities</span>
+                        <span style="color: black;">■</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
@@ -566,7 +613,7 @@
 
             map.addSource('zoning', {
                 type: 'geojson',
-                data: 'zoning.geojson'
+                data: 'zoning2.geojson'
             });
 
             map.addLayer({
@@ -866,27 +913,22 @@
                 paint: {
                     'fill-color': [
                         'match',
-                        ['get', 'kentonzoning - kentonzoning_ZSHORT'],
-                        'R1', '#FF6B6B',
-                        'R2', '#4ECDC4',
-                        'R3', '#45B7D1',
-                        'R4', '#96CEB4',
-                        'R5', '#FECA57',
-                        'C1', '#FF9FF3',
-                        'C2', '#54A0FF',
-                        'C3', '#5F27CD',
-                        'I1', '#10AC84',
-                        'I2', '#EE5A24',
-                        'PUD', '#9C88FF',
-                        'A1', '#FFC312',
-                        'A2', '#C4E538',
-                        'PD', '#F79F1F',
-                        'MU', '#A3CB38',
-                        'OS', '#67E6DC',
-                        'PF', '#FDA7DF',
-                        '#CCCCCC' // default gray for unknown codes
+                        ['get', 'ZCAT'],
+                        'Residential - low', '#fff8bf',
+                        'Residential - middle', '#ffd489',
+                        'Residential - high', '#ffa631',
+                        'Commercial', '#ff6969',
+                        'Industrial', '#767676',
+                        'Agricultural', '#d2c698',
+                        'Mixed-use', '#d899dd',
+                        'Planned Unit Development', '#0ec1e1',
+                        'Open space', '#d4f088',
+                        'Public Facilities', '#7e3185',
+                        'Institutional', '#6e79dc',
+                        'white' // default gray for unknown categories
                     ],
-                    'fill-opacity': 0.6
+                    'fill-opacity': .8,
+                    'fill-outline-color': 'black'
                 }
             }, labelLayerId);
 
@@ -896,15 +938,15 @@
                 source: 'zoning',
                 layout: {
                     visibility: 'none',
-                    'text-field': ['get', 'ZSHORT'],
+                    'text-field': ['get', 'ZONE'],
                     'text-font': ['Roboto Regular', 'Arial Unicode MS Regular'],
-                    'text-size': 10,
+                    'text-size': 14,
                     'text-anchor': 'center'
                 },
                 paint: {
-                    'text-color': '#000000',
-                    'text-halo-color': '#ffffff',
-                    'text-halo-width': 1
+                    'text-color': '#FFFFFF',
+                    'text-halo-color': '#000000',
+                    'text-halo-width': 3
                 },
                 minzoom: 14
             }, labelLayerId);
@@ -1113,6 +1155,12 @@
             const visible = e.target.checked ? 'visible' : 'none';
             if (map.getLayer('zoning')) map.setLayoutProperty('zoning', 'visibility', visible);
             if (map.getLayer('zoning-labels')) map.setLayoutProperty('zoning-labels', 'visibility', visible);
+            
+            // Show/hide zoning legend
+            const zoningLegend = document.getElementById('zoning-legend');
+            if (zoningLegend) {
+                zoningLegend.style.display = e.target.checked ? 'block' : 'none';
+            }
         });
 
         aboutToggle.addEventListener('click', () => {
@@ -1193,6 +1241,10 @@
                     const salesLegend = document.getElementById('sales-legend');
                     if (salesLegend) {
                         salesLegend.style.display = salesVisible ? 'block' : 'none';
+                    }
+                    const zoningLegend = document.getElementById('zoning-legend');
+                    if (zoningLegend) {
+                        zoningLegend.style.display = zoningVisible ? 'block' : 'none';
                     }
                 });
             });
