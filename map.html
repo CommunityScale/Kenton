@@ -282,6 +282,19 @@
                             </div>
                             <span class="leading-snug ms-2">Zoning</span>
                         </label>
+
+                        <!-- Overlay Toggle: Cities -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-cities" type="checkbox" class="sr-only peer" />
+                                <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
+                            </div>
+                            <span class="leading-snug ms-2">Cities</span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -616,6 +629,11 @@
                 data: 'zoning2.geojson'
             });
 
+                        map.addSource('cities', {
+                type: 'geojson',
+                data: 'Ky_City_Boundary_Polygon.geojson'
+            });
+
             map.addLayer({
                 id: 'Lot-Sizes-of-Residential-Parcels',
                 type: 'fill',
@@ -668,6 +686,7 @@
                     'fill-opacity': 0.25
                 }
             }, labelLayerId);
+
 
             map.addLayer({
                 id: 'waterservice',
@@ -952,6 +971,21 @@
             }, labelLayerId);
 
             map.addLayer({
+                id: 'cities',
+                type: 'line',
+                source: 'cities',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'line-color': 'black',
+                    'line-width': 1.5
+                }
+            });
+
+            map.setFilter('cities', ['==', ['get', 'COUNTY'], 'KENTON']);
+
+            map.addLayer({
                 id: 'boundary',
                 type: 'line',
                 source: 'boundary',
@@ -1163,6 +1197,11 @@
             }
         });
 
+        document.getElementById('toggle-cities').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('cities')) map.setLayoutProperty('cities', 'visibility', visible);
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -1181,6 +1220,7 @@
             const transitVisible = document.getElementById('toggle-transit').checked;
             const valperacreVisible = document.getElementById('toggle-valperacre').checked;
             const zoningVisible = document.getElementById('toggle-zoning').checked;
+            const citiesVisible = document.getElementById('toggle-cities').checked;
 
             map.setStyle(style);
 
@@ -1220,6 +1260,8 @@
                         map.setLayoutProperty('zoning', 'visibility', zoningVisible ? 'visible' : 'none');
                     if (map.getLayer('zoning-labels'))
                         map.setLayoutProperty('zoning-labels', 'visibility', zoningVisible ? 'visible' : 'none');
+                    if (map.getLayer('cities'))
+                        map.setLayoutProperty('cities', 'visibility', citiesVisible ? 'visible' : 'none');
                         
                     // Restore legend visibility
                     const walkLegend = document.getElementById('walk-legend');
