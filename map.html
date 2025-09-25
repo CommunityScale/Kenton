@@ -615,7 +615,7 @@
         function addMapLayers() {
             map.addSource('parcels', {
                 type: 'geojson',
-                data: 'Parcels_with_addresses4.geojson'
+                data: 'Parcels_with_addresses5.geojson'
             });
 
             map.addSource('parcelssimple', {
@@ -843,7 +843,7 @@
                 paint: {
                     'fill-color': [
                         'case',
-                        ['==', ['get', 'DUAC'], null], 'rgba(0,0,0,0)',
+                        ['==', ['get', 'DUAC'], null], '#434343',
                         [
                             'interpolate',
                             ['linear'],
