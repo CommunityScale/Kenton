@@ -615,7 +615,7 @@
         function addMapLayers() {
             map.addSource('parcels', {
                 type: 'geojson',
-                data: 'Parcels_with_addresses3.geojson'
+                data: 'Parcels_with_addresses4.geojson'
             });
 
             map.addSource('parcelssimple', {
@@ -652,7 +652,7 @@
 
             map.addSource('sanitaryservice', {
                 type: 'geojson',
-                data: 'sanitaryservice.geojson'
+                data: 'sanitaryservice2.geojson'
             });
 
             map.addSource('waterservice', {
@@ -706,8 +706,8 @@
                 source: 'parcels',
                 paint: {
                     'fill-color': [
-                        "case", ["==", ["get", "score3"], null], 'white',
-                        ["interpolate", ["linear"], ["get", "score3"],
+                        "case", ["==", ["get", "score4"], null], 'white',
+                        ["interpolate", ["linear"], ["get", "score4"],
                             0, lotSizePalette[0],
                             1.5, lotSizePalette[1],
                             2, lotSizePalette[2],
@@ -1116,14 +1116,14 @@
                 const properties = e.features[0].properties;
 
                 const address = properties.address || 'Address not available';
-                const score3 = properties.score3 !== null && properties.score3 !== undefined ?
-                    properties.score3.toFixed(2) : 'Not available';
+                const score4 = properties.score4 !== null && properties.score4 !== undefined ?
+                    properties.score4.toFixed(2) : 'Not available';
 
                 const popupContent = `
                     <div class="popup-header">Parcel Information</div>
                     <div class="popup-content">
                         <p><strong>Address:</strong> ${address}</p>
-                        <p><strong>Suitability Score:</strong> ${score3}</p>
+                        <p><strong>Suitability Score:</strong> ${score4}</p>
                     </div>
                 `;
 
