@@ -323,6 +323,20 @@
                             <span class="leading-snug ms-2">Dwelling units per acre allowed by zoning
                                 (Simplified)</span>
                         </label>
+
+                        <!-- Overlay Toggle: Sanline -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-sanline" type="checkbox" class="sr-only peer" />
+                                <div
+                                    class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
+                            </div>
+                            <span class="leading-snug ms-2">Sanitary line</span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -698,6 +712,11 @@
             map.addSource('dua', {
                 type: 'geojson',
                 data: 'dua.geojson'
+            });
+
+            map.addSource('sanline', {
+                type: 'geojson',
+                data: 'sanline.geojson'
             });
 
             map.addLayer({
@@ -1079,6 +1098,19 @@
             map.setFilter('cities', ['==', ['get', 'COUNTY'], 'KENTON']);
 
             map.addLayer({
+                id: 'sanline',
+                type: 'line',
+                source: 'sanline',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'line-color': '#f95738',
+                    'line-width': 1
+                }
+            }, labelLayerId);
+
+            map.addLayer({
                 id: 'boundary',
                 type: 'line',
                 source: 'boundary',
@@ -1309,6 +1341,11 @@
             if (map.getLayer('cities')) map.setLayoutProperty('cities', 'visibility', visible);
         });
 
+        document.getElementById('toggle-sanline').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('sanline')) map.setLayoutProperty('sanline', 'visibility', visible);
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -1329,6 +1366,7 @@
             const valperacreVisible = document.getElementById('toggle-valperacre').checked;
             const zoningVisible = document.getElementById('toggle-zoning').checked;
             const citiesVisible = document.getElementById('toggle-cities').checked;
+            const sanlineVisible = document.getElementById('toggle-sanline').checked;
 
             map.setStyle(style);
 
@@ -1374,6 +1412,8 @@
                         map.setLayoutProperty('zoning-labels', 'visibility', (zoningVisible || duaVisible) ? 'visible' : 'none');
                     if (map.getLayer('cities'))
                         map.setLayoutProperty('cities', 'visibility', citiesVisible ? 'visible' : 'none');
+                    if (map.getLayer('sanline'))
+                        map.setLayoutProperty('sanline', 'visibility', sanlineVisible ? 'visible' : 'none');
 
                     // Restore legend visibility
                     const walkLegend = document.getElementById('walk-legend');
