@@ -569,20 +569,20 @@
                 <h3 class="font-medium mb-2">Dwelling units per acre</h3>
                 <div class="space-y-1 text-xs mt-2 text-gray-600">
                     <div class="flex justify-between">
-                        <span>1</span>
-                        <span style="color: #f6f3d8; font-size: 1.4em;">●</span>
+                        <span>1-2</span>
+                        <span style="color: #f9f6dd; font-size: 1.4em;">●</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>10</span>
-                        <span style="color: #fff298; font-size: 1.4em;">●</span>
+                        <span>3-9</span>
+                        <span style="color: #fff290; font-size: 1.4em;">●</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>25</span>
-                        <span style="color: #ebd74a; font-size: 1.4em;">●</span>
+                        <span>10-79</span>
+                        <span style="color: #e9d14e; font-size: 1.4em;">●</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>50+</span>
-                        <span style="color: #b6a33a; font-size: 1.4em;">●</span>
+                        <span>80+</span>
+                        <span style="color: #c5aa2b; font-size: 1.4em;">●</span>
                     </div>
                                         <div class="flex justify-between">
                         <span>PUD</span>
@@ -868,17 +868,16 @@
                         'case',
                         ['==', ['get', 'DUAC'], null], '#434343',
                         [
-                            'interpolate',
-                            ['linear'],
+                            'step',
                             ['get', 'DUAC'],
-                            0, 'transparent',
-                            1, '#f6f3d8',
-                            10, '#ffed5e',
-                            25, '#e9d14e',
-                            50, '#c5aa2b'
+                            'transparent',
+                            1, '#f9f6dd',
+                            3, '#fff290',
+                            10, '#e9d14e',
+                            80, '#c5aa2b'
                         ]
                     ],
-                    'fill-opacity': 0.7,
+                    'fill-opacity': 0.9,
                     'fill-outline-color': 'black'
                 }
             }, labelLayerId);
