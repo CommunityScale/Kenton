@@ -337,6 +337,34 @@
                             </div>
                             <span class="leading-snug ms-2">Sanitary line</span>
                         </label>
+
+                        <!-- Overlay Toggle: Kenton Values -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-kentonvalues" type="checkbox" class="sr-only peer" />
+                                <div
+                                    class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
+                            </div>
+                            <span class="leading-snug ms-2">Property values</span>
+                        </label>
+
+                        <!-- Overlay Toggle: Density Values Clip 2 -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-densvalsclip2" type="checkbox" class="sr-only peer" />
+                                <div
+                                    class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
+                            </div>
+                            <span class="leading-snug ms-2">Low density allowed, high value</span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -595,6 +623,38 @@
                 </div>
             </div>
 
+            <!-- KENTONVALUES LEGEND -->
+            <div id="kentonvalues-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700"
+                style="display: none;">
+                <h3 class="font-medium mb-2">Property values</h3>
+                <div class="h-4 w-full rounded"
+                    style="background: linear-gradient(to right, #fff7fb, #ece2f0, #d0d1e6, #a6bddb, #67a9cf, #3690c0, #02818a, #016450);">
+                </div>
+                <div class="flex justify-between text-xs mt-1 text-gray-600">
+                    <span>Lower</span>
+                    <span>Higher</span>
+                </div>
+            </div>
+
+            <!-- DENSVALSCLIP2 LEGEND -->
+            <div id="densvalsclip2-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700"
+                style="display: none;">
+                <h3 class="font-medium mb-2">Low density allowed, high value</h3>
+                <div class="space-y-1 text-xs mt-2 text-gray-600">
+                    <div class="flex justify-between">
+                        <span>No density allowed</span>
+                        <span style="color: #FFC0CB; font-size: 1.4em;">●</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Low density allowed (< 0.5)</span>
+                        <span style="color: #FF0000; font-size: 1.4em;">●</span>
+                    </div>
+                </div>
+                <div class="text-xs mt-2 text-gray-500 italic">
+                    Areas with MMDensAllw < 0.5 and MMVal > 0.5
+                </div>
+            </div>
+
         </div>
 
 
@@ -727,6 +787,16 @@
                 data: 'sanline.geojson'
             });
 
+            map.addSource('kentonvalues', {
+                type: 'geojson',
+                data: 'kentonvalues.geojson'
+            });
+
+            map.addSource('densvalsclip2', {
+                type: 'geojson',
+                data: 'densvalsclip2.geojson'
+            });
+
             map.addLayer({
                 id: 'Lot-Sizes-of-Residential-Parcels',
                 type: 'fill',
@@ -737,7 +807,7 @@
                         ["interpolate", ["linear"], ["get", "score4"],
                             0, lotSizePalette[0],
                             1.5, lotSizePalette[1],
-                            2, lotSizePalette[2],
+                            2.06, lotSizePalette[2],
                             2.2, lotSizePalette[3],
                             2.7, lotSizePalette[4],
                             3.7, lotSizePalette[5],
@@ -1127,6 +1197,28 @@
                     'line-width': 1
                 }
             });
+
+            map.addLayer({
+                id: 'densvalsclip2',
+                type: 'fill',
+                source: 'densvalsclip2',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': [
+                        'case',
+                        ['==', ['get', 'MMDensAllw'], 0], '#8e2e36',  // pink for MMDensAllw = 0
+                        '#ec6448'  // red for everything else that passes the filter
+                    ],
+                    'fill-opacity': 0.8
+                },
+                filter: [
+                    'all',
+                    ['<', ['get', 'MMDensAllw'], 0.5],
+                    ['>', ['get', 'MMVal'], 0.5]
+                ]
+            }, labelLayerId);
         };
 
         const opacitySlider = document.getElementById('opacity-slider');
@@ -1354,6 +1446,17 @@
             if (map.getLayer('sanline')) map.setLayoutProperty('sanline', 'visibility', visible);
         });
 
+        document.getElementById('toggle-densvalsclip2').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('densvalsclip2')) map.setLayoutProperty('densvalsclip2', 'visibility', visible);
+
+            // Show/hide densvalsclip2 legend
+            const densvalsclip2Legend = document.getElementById('densvalsclip2-legend');
+            if (densvalsclip2Legend) {
+                densvalsclip2Legend.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -1375,6 +1478,7 @@
             const zoningVisible = document.getElementById('toggle-zoning').checked;
             const citiesVisible = document.getElementById('toggle-cities').checked;
             const sanlineVisible = document.getElementById('toggle-sanline').checked;
+            const densvalsclip2Visible = document.getElementById('toggle-densvalsclip2').checked;
 
             map.setStyle(style);
 
@@ -1422,6 +1526,8 @@
                         map.setLayoutProperty('cities', 'visibility', citiesVisible ? 'visible' : 'none');
                     if (map.getLayer('sanline'))
                         map.setLayoutProperty('sanline', 'visibility', sanlineVisible ? 'visible' : 'none');
+                    if (map.getLayer('densvalsclip2'))
+                        map.setLayoutProperty('densvalsclip2', 'visibility', densvalsclip2Visible ? 'visible' : 'none');
 
                     // Restore legend visibility
                     const walkLegend = document.getElementById('walk-legend');
@@ -1451,6 +1557,10 @@
                     const duaLegend = document.getElementById('dua-legend');
                     if (duaLegend) {
                         duaLegend.style.display = duaVisible ? 'block' : 'none';
+                    }
+                    const densvalsclip2Legend = document.getElementById('densvalsclip2-legend');
+                    if (densvalsclip2Legend) {
+                        densvalsclip2Legend.style.display = densvalsclip2Visible ? 'block' : 'none';
                     }
                 });
             });
