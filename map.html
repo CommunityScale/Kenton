@@ -365,6 +365,20 @@
                             </div>
                             <span class="leading-snug ms-2">Low density allowed, high value</span>
                         </label>
+
+                        <!-- Overlay Toggle: Kenton Residential Use -->
+                        <label class="flex items-start text-sm text-gray-700">
+                            <div class="relative">
+                                <input id="toggle-kentonresi" type="checkbox" class="sr-only peer" />
+                                <div
+                                    class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
+                                </div>
+                                <div
+                                    class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]">
+                                </div>
+                            </div>
+                            <span class="leading-snug ms-2">Residential use type</span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -655,6 +669,26 @@
                 </div>
             </div>
 
+            <!-- KENTONRESI LEGEND -->
+            <div id="kentonresi-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700"
+                style="display: none;">
+                <h3 class="font-medium mb-2">Residential use type</h3>
+                <div class="space-y-1 text-xs mt-2 text-gray-600">
+                    <div class="flex justify-between">
+                        <span>Multi-family, 4+ units</span>
+                        <span style="color: #ff8c00; font-size: 1.4em;">●</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Residential, 4 units or fewer</span>
+                        <span style="color: #ffff00; font-size: 1.4em;">●</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Mixed-use with varying residential</span>
+                        <span style="color: #ff1493; font-size: 1.4em;">●</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 
@@ -795,6 +829,11 @@
             map.addSource('densvalsclip2', {
                 type: 'geojson',
                 data: 'densvalsclip2.geojson'
+            });
+
+            map.addSource('kentonresi', {
+                type: 'geojson',
+                data: 'kentonresi.geojson'
             });
 
             map.addLayer({
@@ -1219,6 +1258,27 @@
                     ['>', ['get', 'MMVal'], 0.5]
                 ]
             }, labelLayerId);
+
+            map.addLayer({
+                id: 'kentonresi',
+                type: 'fill',
+                source: 'kentonresi',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': [
+                        'match',
+                        ['get', 'UseSumm'],
+                        'MF', '#ff8c00',     // orange
+                        'Resi', '#ffff00',   // yellow
+                        'MU', '#ff1493',     // hot pink
+                        '#808080'            // default gray for other values
+                    ],
+                    'fill-opacity': 0.8,
+                    'fill-outline-color': 'black'
+                }
+            }, labelLayerId);
         };
 
         const opacitySlider = document.getElementById('opacity-slider');
@@ -1457,6 +1517,17 @@
             }
         });
 
+        document.getElementById('toggle-kentonresi').addEventListener('change', (e) => {
+            const visible = e.target.checked ? 'visible' : 'none';
+            if (map.getLayer('kentonresi')) map.setLayoutProperty('kentonresi', 'visibility', visible);
+
+            // Show/hide kentonresi legend
+            const kentonresiLegend = document.getElementById('kentonresi-legend');
+            if (kentonresiLegend) {
+                kentonresiLegend.style.display = e.target.checked ? 'block' : 'none';
+            }
+        });
+
         aboutToggle.addEventListener('click', () => {
             aboutContent.classList.toggle('hidden');
             aboutArrow.classList.toggle('rotate-180');
@@ -1479,6 +1550,7 @@
             const citiesVisible = document.getElementById('toggle-cities').checked;
             const sanlineVisible = document.getElementById('toggle-sanline').checked;
             const densvalsclip2Visible = document.getElementById('toggle-densvalsclip2').checked;
+            const kentonresiVisible = document.getElementById('toggle-kentonresi').checked;
 
             map.setStyle(style);
 
@@ -1528,6 +1600,8 @@
                         map.setLayoutProperty('sanline', 'visibility', sanlineVisible ? 'visible' : 'none');
                     if (map.getLayer('densvalsclip2'))
                         map.setLayoutProperty('densvalsclip2', 'visibility', densvalsclip2Visible ? 'visible' : 'none');
+                    if (map.getLayer('kentonresi'))
+                        map.setLayoutProperty('kentonresi', 'visibility', kentonresiVisible ? 'visible' : 'none');
 
                     // Restore legend visibility
                     const walkLegend = document.getElementById('walk-legend');
@@ -1561,6 +1635,10 @@
                     const densvalsclip2Legend = document.getElementById('densvalsclip2-legend');
                     if (densvalsclip2Legend) {
                         densvalsclip2Legend.style.display = densvalsclip2Visible ? 'block' : 'none';
+                    }
+                    const kentonresiLegend = document.getElementById('kentonresi-legend');
+                    if (kentonresiLegend) {
+                        kentonresiLegend.style.display = kentonresiVisible ? 'block' : 'none';
                     }
                 });
             });
