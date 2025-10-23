@@ -358,7 +358,7 @@
                         <!-- Overlay Toggle: Density Values Clip 2 -->
                         <label class="flex items-start text-sm text-gray-700">
                             <div class="relative">
-                                <input id="toggle-densvalsclip2" type="checkbox" class="sr-only peer" />
+                                <input id="toggle-densvalsclip4" type="checkbox" class="sr-only peer" />
                                 <div
                                     class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors">
                                 </div>
@@ -653,8 +653,8 @@
                 </div>
             </div>
 
-            <!-- DENSVALSCLIP2 LEGEND -->
-            <div id="densvalsclip2-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700"
+            <!-- densvalsclip4 LEGEND -->
+            <div id="densvalsclip4-legend" class="mt-6 border-t border-gray-300 pt-4 text-sm text-gray-700"
                 style="display: none;">
                 <h3 class="font-medium mb-2">Low density allowed, high value</h3>
                 <div class="space-y-1 text-xs mt-2 text-gray-600">
@@ -829,9 +829,9 @@
                 data: 'kentonvalues.geojson'
             });
 
-            map.addSource('densvalsclip2', {
+            map.addSource('densvalsclip4', {
                 type: 'geojson',
-                data: 'densvalsclip2.geojson'
+                data: 'densvalsclip4.geojson'
             });
 
             map.addSource('kentonresi', {
@@ -1241,25 +1241,20 @@
             });
 
             map.addLayer({
-                id: 'densvalsclip2',
+                id: 'densvalsclip4',
                 type: 'fill',
-                source: 'densvalsclip2',
+                source: 'densvalsclip4',
                 layout: {
                     visibility: 'none'
                 },
                 paint: {
                     'fill-color': [
                         'case',
-                        ['==', ['get', 'MMDensAllw'], 0], '#8e2e36',  // pink for MMDensAllw = 0
+                        ['==', ['get', 'DensEnuff'], -1], '#8e2e36',  // pink for MMDensAllw = 0
                         '#ec6448'  // red for everything else that passes the filter
                     ],
                     'fill-opacity': 0.8
                 },
-                filter: [
-                    'all',
-                    ['<', ['get', 'MMDensAllw'], 0.5],
-                    ['>', ['get', 'MMVal'], 0.5]
-                ]
             }, labelLayerId);
 
             map.addLayer({
@@ -1509,14 +1504,14 @@
             if (map.getLayer('sanline')) map.setLayoutProperty('sanline', 'visibility', visible);
         });
 
-        document.getElementById('toggle-densvalsclip2').addEventListener('change', (e) => {
+        document.getElementById('toggle-densvalsclip4').addEventListener('change', (e) => {
             const visible = e.target.checked ? 'visible' : 'none';
-            if (map.getLayer('densvalsclip2')) map.setLayoutProperty('densvalsclip2', 'visibility', visible);
+            if (map.getLayer('densvalsclip4')) map.setLayoutProperty('densvalsclip4', 'visibility', visible);
 
-            // Show/hide densvalsclip2 legend
-            const densvalsclip2Legend = document.getElementById('densvalsclip2-legend');
-            if (densvalsclip2Legend) {
-                densvalsclip2Legend.style.display = e.target.checked ? 'block' : 'none';
+            // Show/hide densvalsclip4 legend
+            const densvalsclip4Legend = document.getElementById('densvalsclip4-legend');
+            if (densvalsclip4Legend) {
+                densvalsclip4Legend.style.display = e.target.checked ? 'block' : 'none';
             }
         });
 
@@ -1552,7 +1547,7 @@
             const zoningVisible = document.getElementById('toggle-zoning').checked;
             const citiesVisible = document.getElementById('toggle-cities').checked;
             const sanlineVisible = document.getElementById('toggle-sanline').checked;
-            const densvalsclip2Visible = document.getElementById('toggle-densvalsclip2').checked;
+            const densvalsclip4Visible = document.getElementById('toggle-densvalsclip4').checked;
             const kentonresiVisible = document.getElementById('toggle-kentonresi').checked;
 
             map.setStyle(style);
@@ -1601,8 +1596,8 @@
                         map.setLayoutProperty('cities', 'visibility', citiesVisible ? 'visible' : 'none');
                     if (map.getLayer('sanline'))
                         map.setLayoutProperty('sanline', 'visibility', sanlineVisible ? 'visible' : 'none');
-                    if (map.getLayer('densvalsclip2'))
-                        map.setLayoutProperty('densvalsclip2', 'visibility', densvalsclip2Visible ? 'visible' : 'none');
+                    if (map.getLayer('densvalsclip4'))
+                        map.setLayoutProperty('densvalsclip4', 'visibility', densvalsclip4Visible ? 'visible' : 'none');
                     if (map.getLayer('kentonresi'))
                         map.setLayoutProperty('kentonresi', 'visibility', kentonresiVisible ? 'visible' : 'none');
 
@@ -1635,9 +1630,9 @@
                     if (duaLegend) {
                         duaLegend.style.display = duaVisible ? 'block' : 'none';
                     }
-                    const densvalsclip2Legend = document.getElementById('densvalsclip2-legend');
-                    if (densvalsclip2Legend) {
-                        densvalsclip2Legend.style.display = densvalsclip2Visible ? 'block' : 'none';
+                    const densvalsclip4Legend = document.getElementById('densvalsclip4-legend');
+                    if (densvalsclip4Legend) {
+                        densvalsclip4Legend.style.display = densvalsclip4Visible ? 'block' : 'none';
                     }
                     const kentonresiLegend = document.getElementById('kentonresi-legend');
                     if (kentonresiLegend) {
