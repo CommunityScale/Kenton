@@ -652,15 +652,15 @@
                 <div class="space-y-1 text-xs mt-2 text-gray-600">
                     <div class="flex justify-between">
                         <span>Multi-family, 4+ units</span>
-                        <span style="color: #ff8c00; font-size: 1.4em;">●</span>
+                        <span style="color: #ecd731; font-size: 1.4em;">●</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Residential, 4 units or fewer</span>
-                        <span style="color: #ffff00; font-size: 1.4em;">●</span>
+                        <span style="color: #fff290; font-size: 1.4em;">●</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Mixed-use with varying residential</span>
-                        <span style="color: #ff1493; font-size: 1.4em;">●</span>
+                        <span style="color: #e79050; font-size: 1.4em;">●</span>
                     </div>
                 </div>
             </div>
@@ -1236,13 +1236,18 @@
                     'fill-color': [
                         'match',
                         ['get', 'UseSumm'],
-                        'MF', '#ff8c00',     // orange
-                        'Resi', '#ffff00',   // yellow
-                        'MU', '#ff1493',     // hot pink
+                        'MF', '#ecd731',     // orange
+                        'Resi', '#fff298',   // yellow
+                        'MU', '#e79050',     // hot pink
                         '#808080'            // default gray for other values
                     ],
-                    'fill-opacity': 0.8,
-                    'fill-outline-color': 'black'
+                    'fill-opacity': 0.95,
+                    'fill-outline-color': [
+                        'step',
+                        ['zoom'],
+                        'black',           // zoom <= 8
+                        8.01, 'transparent' // zoom > 8
+                    ]
                 }
             }, labelLayerId);
         };
