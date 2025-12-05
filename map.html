@@ -87,7 +87,7 @@
             <div id="legend" class="mt-4 text-sm text-gray-700">
                 <h3 class="font-medium mb-2">Suitability score</h3>
                 <div class="h-4 w-full rounded"
-                    style="background: linear-gradient(to right, #fff7fb, #ece2f0, #d0d1e6, #a6bddb, #67a9cf, #3690c0, #02818a, #016450);">
+                    style="background: linear-gradient(to right, #bdc9e1, #67a9cf, #1c9099, #016c59);">
                 </div>
                 <div class="flex justify-between text-xs mt-1 text-gray-600">
                     <span>Less</span>
@@ -675,7 +675,7 @@
     <!-- MAP SCRIPT -->
     <script>
         const lotSizePalette = [
-            '#fff7fb', '#ece2f0', '#d0d1e6', '#a6bddb', '#67a9cf',
+            '#ffffff', '#ffffff', '#ffffff', '#a6bddb', '#67a9cf',
             '#3690c0', '#02818a', '#016450'
         ];
 
@@ -685,13 +685,13 @@
 
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/communityscale/cmcuwuwcv00xz01s1gn7xccqi',
+            style: 'mapbox://styles/communityscale/cmgicidwh007k01qdauae93b0',
             zoom: 10.61,
             center: [-84.546772, 38.936],
-            projection: 'globe'
+            projection: 'albers'
         });
         const BASEMAP_STYLES = {
-            light: 'mapbox://styles/communityscale/cmcuwuwcv00xz01s1gn7xccqi',
+            light: 'mapbox://styles/communityscale/cmgicidwh007k01qdauae93b0',
             satellite: 'mapbox://styles/communityscale/cmc96uych026401s6577egc2r'
         };
 
@@ -807,22 +807,20 @@
                 data: 'kentonresi.geojson'
             });
 
+
             map.addLayer({
-                id: 'Lot-Sizes-of-Residential-Parcels',
+                id: 'Suitability',
                 type: 'fill',
                 source: 'parcels',
                 paint: {
                     'fill-color': [
                         "case", ["==", ["get", "score4"], null], 'white',
-                        ["interpolate", ["linear"], ["get", "score4"],
-                            0, lotSizePalette[0],
-                            1.5, lotSizePalette[1],
-                            2.06, lotSizePalette[2],
-                            2.2, lotSizePalette[3],
-                            2.7, lotSizePalette[4],
-                            3.7, lotSizePalette[5],
-                            4.7, lotSizePalette[6],
-                            6, lotSizePalette[7]
+                        ["step", ["get", "score4"],
+                            'rgba(0,0,0,0)',
+                            2.5, "#bdc9e1",
+                            3.5, "#67a9cf",
+                            5, "#1c9099",
+                            6, "#016c59"
                         ]
                     ],
                     'fill-opacity': [
@@ -1186,6 +1184,26 @@
             map.setFilter('cities', ['==', ['get', 'COUNTY'], 'KENTON']);
 
             map.addLayer({
+                id: 'cities-labels',
+                type: 'symbol',
+                source: 'cities',
+                layout: {
+                    visibility: 'visible',
+                    'text-field': ['get', 'NAME'],
+                    'text-font': ['Roboto Regular', 'Arial Unicode MS Regular'],
+                    'text-size': 12,
+                    'text-anchor': 'center'
+                },
+                paint: {
+                    'text-color': '#000000',
+                    'text-halo-color': '#ffffff',
+                    'text-halo-width': 2
+                }
+            }, labelLayerId);
+
+            map.setFilter('cities-labels', ['==', ['get', 'COUNTY'], 'KENTON']);
+
+            map.addLayer({
                 id: 'sanline',
                 type: 'line',
                 source: 'sanline',
@@ -1255,7 +1273,7 @@
         const opacitySlider = document.getElementById('opacity-slider');
         opacitySlider.addEventListener('input', (e) => {
             currentOpacity = parseFloat(e.target.value);
-            map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
+            map.setPaintProperty('Suitability', 'fill-opacity', [
                 "case",
                 ["boolean", ["feature-state", "hover"], false],
                 0.7,
@@ -1267,14 +1285,14 @@
         map.on('load', () => {
             map.setFog({});
             addMapLayers();
-            map.setLayoutProperty('Lot-Sizes-of-Residential-Parcels', 'visibility', 'visible');
+            map.setLayoutProperty('Suitability', 'visibility', 'visible');
             window.addEventListener('resize', () => {
                 map.resize();
             });
 
-            map.setLayoutProperty('Lot-Sizes-of-Residential-Parcels', 'visibility', 'visible');
+            map.setLayoutProperty('Suitability', 'visibility', 'visible');
 
-            map.on('click', 'Lot-Sizes-of-Residential-Parcels', (e) => {
+            map.on('click', 'Suitability', (e) => {
                 const coordinates = e.lngLat;
                 const properties = e.features[0].properties;
 
@@ -1322,11 +1340,11 @@
                     .addTo(map);
             });
 
-            map.on('mouseenter', 'Lot-Sizes-of-Residential-Parcels', () => {
+            map.on('mouseenter', 'Suitability', () => {
                 map.getCanvas().style.cursor = 'pointer';
             });
 
-            map.on('mouseleave', 'Lot-Sizes-of-Residential-Parcels', () => {
+            map.on('mouseleave', 'Suitability', () => {
                 map.getCanvas().style.cursor = '';
             });
 
@@ -1528,7 +1546,7 @@
             map.once('style.load', () => {
                 addMapLayers();
 
-                map.setPaintProperty('Lot-Sizes-of-Residential-Parcels', 'fill-opacity', [
+                map.setPaintProperty('Suitability', 'fill-opacity', [
                     "case", ["boolean", ["feature-state", "hover"], false], 0.7, currentOpacity
                 ]);
 
